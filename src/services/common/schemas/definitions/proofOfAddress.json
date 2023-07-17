@@ -1,0 +1,26 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "type": "object",
+    "required": ["name", "address", "city", "state", "country", "zip"],
+    "additionalProperties": false,
+    "properties": {
+      "name": {
+        "type": "string"
+      },
+      "address": {
+        "type": "string"
+      },
+      "city": {
+        "type": "string"
+      },
+      "state": {
+        "type": "string"
+      },
+      "country": {
+        "type": "string"
+      },
+      "zip": {
+        "type": "string"
+      }
+    }
+  }
