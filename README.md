@@ -1,4 +1,4 @@
-# Onyx SSI
+# Onyx SSI SDK
 
 Create SSI Ecosystems following W3C Standards for [Verifiable Credentials](https://www.w3.org/TR/vc-data-model/) and [DIDs](https://www.w3.org/TR/did-core/)
 
@@ -16,7 +16,7 @@ Create SSI Ecosystems following W3C Standards for [Verifiable Credentials](https
 ### Installation
 
 ``` shell
-npm install @inprd/ssi
+npm install @jpmorganchase/onyx-ssi-sdk
 ```
 
 ### Build
@@ -39,6 +39,15 @@ npx hardhat compile
 npx hardhat test
 ```
 
+## Navigating the SDK
+* [DID Management](https://github.com/jpmorganchase/onyx-ssi-sdk/tree/main/src/services/common/did): Create, Resolve, Update, and Delete the 2 supported DID Methods (did:key and did:ethr)
+* [Credential Schema Management](https://github.com/jpmorganchase/onyx-ssi-sdk/tree/main/src/services/common/schemas): Example of 4 Credential Types and their schemas as well as helper methods for Schema Management
+* [JWT Signatures](https://github.com/jpmorganchase/onyx-ssi-sdk/tree/main/src/services/common/signatures): Sign Verifiable Credentials as JWTs
+* [Issuer](https://github.com/jpmorganchase/onyx-ssi-sdk/tree/main/src/services/issuer): All functionality required to be a Credential Issuer
+* [Holder](https://github.com/jpmorganchase/onyx-ssi-sdk/tree/main/src/services/holder): All functionality required to be a Credential Holder
+* [Verifier](https://github.com/jpmorganchase/onyx-ssi-sdk/tree/main/src/services/verifier): All functionality to perform basic Credential verification
+* [KeyUtils](https://github.com/jpmorganchase/onyx-ssi-sdk/blob/main/src/utils/KeyUtils.ts): Helper functions for SDK supported keys
+
 ## Full SSI Ecosystem Example
 
 Issuance - Claiming - Verification of W3C Credential/Presentation
@@ -49,8 +58,8 @@ Issuance - Claiming - Verification of W3C Credential/Presentation
 const didKey = new KeyDIDMethod()
 
 //DID Ethr configs
-const ethrProvider = {name: 'maticmum', 
-    chainId: 80001, 
+const ethrProvider = {
+    name: 'maticmum', 
     rpcUrl: 'https://rpc-mumbai.maticvigil.com/', 
     registry: "0x41D788c9c5D335362D713152F407692c5EEAfAae"}
    
@@ -114,19 +123,16 @@ const resultVp = await verifyPresentationJWT(jwtVP, didResolver)
 console.log(resultVp)
 ```
 
-## Open Source Identity Packages used
+## Open Source Identity Packages
 * [did-resolver](https://github.com/decentralized-identity/did-resolver)
 * [ethr-did-resolver](https://github.com/decentralized-identity/ethr-did-resolver)
 * [key-did-resolver](https://github.com/ceramicnetwork/js-did/tree/main/packages/key-did-resolver)
 * [did-jwt-vc](https://github.com/decentralized-identity/did-jwt-vc)
 * [did-jwt](https://github.com/decentralized-identity/did-jwt)
 
-
-## Opportunities for SDK development
-
-* json-ld signature support
-* other DID method support
-* Revocation - CredentialStatusList support
-* communication support for DIDComm, OIDC, Presentation exchange
-* selective disclosure support (sd-jwt)
+## Standards and Specifications
+* [W3C Verifiable Credentials 1.0](https://www.w3.org/TR/vc-data-model/)
+* [Decentralized Identifiers v1.0](https://w3c.github.io/did-core/)
+* [did:key spec](https://w3c-ccg.github.io/did-method-key/)
+* [did:ethr spec](https://github.com/decentralized-identity/ethr-did-resolver/blob/master/doc/did-method-spec.md)
 
