@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "SSI SDK for Onyx W3C Verifiable Credentials",
   "license": "Apache-2.0",
-  "private": true,
   "source": "src/index.ts",
   "types": "./lib/cjs/types/index.d.ts",
   "main": "./lib/cjs/index.js",
