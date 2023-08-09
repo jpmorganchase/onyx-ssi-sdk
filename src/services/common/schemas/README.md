@@ -23,7 +23,7 @@ The 4 Credential Types provided in this SDK are [`proofOfAddress`](src/services/
 
 When defining a new schema, the `$schema` property needs to be specified so the defined schema can be validated.
 
-To use a new schema in a VC, define a schema as a JSON file and add to the [definitions](src/services/common/schemas/definitions) folder
+To use a new schema in a VC, define a schema as a JSON file and add to the [definitions](src/services/common/schemas/definitions) folder.
 
 Two helper functions are provided to retrieve the schema as a `JSONSchema` object.
 * `getSchemaRemote` can be used for remotely hosted schemas. Specify the remote location to retrieve the schema as a `JsonSchema` object. 
@@ -49,7 +49,7 @@ Some use cases may require verifying that a Verifiable Credential conforms to a 
 `validateCredentialSubject` is provided to easily validate that a `credentialSubject` object follows the defined schema.
 Please make sure that the Verifier code can access the URI location of the schema that was defined in the Issuance of the Credential.
 
-### Future improvements
+### Future Improvements
 
 Currently schema definitions are defined in the definitions folder of the SDK. Depending on use case needs, the Onyx SDK will provide options for registering schemas publicly (either on chain or in a hosted location).
 
