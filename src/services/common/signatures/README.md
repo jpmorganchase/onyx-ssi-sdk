@@ -51,7 +51,7 @@ Signing a VC requires an `Issuer`, `CredentialPayload` and `CreateCredentialOpti
 Signing a VP requires an `Issuer`, `PresentationPayload` and `CreatePresentationOptions` as inputs to the [`createVerifiablePresentationJwt`](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/index.ts#L134) function in did-jwt-vc.
 #### Signing Options
 
-[did-jwt-vc](https://github.com/decentralized-identity/did-jwt-vc) allows for more complex signing options from the `CreateCredentialOptions` and `CreatePresentationOptions` types. Below is a brief descriptions of those types, however please reference [did-jwt-vc types](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts) for full understanding of usage.
+[did-jwt-vc](https://github.com/decentralized-identity/did-jwt-vc) allows for more complex signing options from the [`CreateCredentialOptions`](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts#L236) and [`CreatePresentationOptions`](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts#L297) types.
 
 ```shell
 /**
