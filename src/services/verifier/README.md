@@ -11,7 +11,7 @@ The Verifiers in an SSI Ecosystem are the Entities who verify the Verifiable Cre
 * Expiration date Verification
 * Credential Schema Verification
 
-### Setup DID resolvers
+### Setup DID Resolvers
 
 [DID Resolvers](https://www.w3.org/TR/did-core/#resolution) are used for signature verification and DID status verification.
 
@@ -48,9 +48,9 @@ This SDK currently supports Verifiable Credentials and Presentations in JWT form
 
 #### Credential JWT Verification
 
-`verifyCredentialJWT` verifies that the Issuer DID is Entity that signed the VC. It can also optionally verify that the VC JWT is valid (ie issuance, not issued before, and expiry dates are all valid) and that the format of the VC is correct.
+`verifyCredentialJWT` verifies that the Issuer DID is Entity that signed the VC. It can also optionally verify that the VC JWT is valid (i.e. issuance, not issued before, and expiry dates are all valid) and that the format of the VC is correct.
 
-This function relies on the `verifyCredential` method from [did-jwt-vc](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/index.ts#L228)
+This function relies on the [`verifyCredential`](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/index.ts#L228) method from did-jwt-vc.
 
 ```shell
     const vc = 'eyJhbGciOiJFUzI1NksiLCJ0eXAiOiJKV1QifQ.eyJ2YyI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjpbIlZlcmlmaWFibGVDcmVkZW50aWFsIiwiUHJvb2ZPZk5hbWUiXSwiY3JlZGVudGlhbFN1YmplY3QiOnsibmFtZSI6IkFuZ2VsYSJ9fSwic3ViIjoiZGlkOmV0aHI6bWF0aWNtdW06MHgyMWFDM2FlNEZjZkM0QTdhOWU4MjJFNjM4NDkxZDc2MjU1OUU5MTllIiwibmJmIjoxNjgwODgzMTc5LCJpc3MiOiJkaWQ6ZXRocjptYXRpY211bToweDcyMkFBOUEzMzNFOTJGYTZBZGVjOUE1N2E2YjZEYUY4MzBBMmY3YmUifQ.TcMJinuMuNQpyZkQ9wxqNkOx9SHpGe6iANXWPMl1etyNbzCrnZhidII6SjwkAu3dcWyjQiT1vCCZKd9HywiJWQ'
@@ -60,7 +60,7 @@ This function relies on the `verifyCredential` method from [did-jwt-vc](https://
     const verified = await verifyCredentialJWT(vc, didResolver, options)
 ```
 
-`VerifyCredentialOptions` is defined in [did-jwt-vc](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts#L260).
+[`VerifyCredentialOptions`](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts#L260) is defined in did-jwt-vc.
 
 ``` shell
 
@@ -93,9 +93,9 @@ interface VerifyCredentialPolicies {
 
 #### Presentation JWT Verification
 
-`verifyPresentationJWT` verifies that the Subject DID is the Entity that signed the VP. If a challenge and audience options were used in signing the VP, this function also verifies that the Presentation contains the challenge in the JWT nonce and that the VP audience is a match. It can also optionally verify that the VP JWT is valid (ie issuance, not issued before, and expiry dates are all correct). In addition, an option to check the format of the VP and included VCs is provided.
+`verifyPresentationJWT` verifies that the Subject DID is the Entity that signed the VP. If a challenge and audience options were used in signing the VP, this function also verifies that the Presentation contains the challenge in the JWT nonce and that the VP audience is a match. It can also optionally verify that the VP JWT is valid (i.e. issuance, not issued before, and expiry dates are all correct). In addition, an option to check the format of the VP and included VCs is provided.
 
-This function relies on the `verifyPresentation` function from [did-jwt-vc](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/index.ts#L287)
+This function relies on the [`verifyPresentation`](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/index.ts#L287) function from did-jwt-vc.
 
 ``` shell
     
@@ -105,7 +105,7 @@ This function relies on the `verifyPresentation` function from [did-jwt-vc](http
     const verified = await verifyPresentationJWT(vp, didResolver, options)
 ```
 
-`VerifyPresentationOptions` type is defined in [did-jwt-vc](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts#L297).
+[`VerifyPresentationOptions`](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts#L297) type is defined in did-jwt-vc.
 
 ``` shell
 interface VerifyPresentationOptions{
@@ -125,7 +125,7 @@ interface VerifyPresentationOptions{
 }
 ```
 
-##### Verifying Credentials within the VP
+##### Verifying Credentials Within the VP
 
 `verifyPresentationJWT` enables verification of the JWT presented by the Holder. In order to verify Credentials within the Presentation, a helper method `getCredentialsFromVP` is provided to get the included [`VerifiableCredential`](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts#L191)s.
 
@@ -139,7 +139,7 @@ interface VerifyPresentationOptions{
 
 ### DID Verification
 
-VC Verification involves verifying that the Issuer DID and the Subject DID contained in the VC are active (ie not revoked). `verifyDIDs` is an additional check and takes in the `VerifiableCredential` object.
+VC Verification involves verifying that the Issuer DID and the Subject DID contained in the VC are active (i.e. not revoked). `verifyDIDs` is an additional check and takes in the `VerifiableCredential` object.
 
 ``` shell
 const verified = await verifyDIDs(vc, didResolver)
@@ -155,7 +155,7 @@ const verified = await verifyRevocation(vc, didResolver)
 
 ### Expiration Date Verification
 
-Expiration date can be verified as part of the JWT verification using the `VerifyCredentialOptions`, however we provide it as a separate function here. `verifyExpiry` takes in the `VerifiableCredential` object
+Expiration date can be verified as part of the JWT verification using the `VerifyCredentialOptions`, however we provide it as a separate function here. `verifyExpiry` takes in the `VerifiableCredential` object.
 
 ``` shell
 const verified = verifyExpiry(vc)
@@ -163,7 +163,7 @@ const verified = verifyExpiry(vc)
 
 ### Issuance Date Verification
 
-Issuance date can be verified as part of the JWT verification using the `VerifyCredentialOptions` parameter, however we provide it as a separate function here. `verifyIssuanceDate` takes in the `VerifiableCredential` object
+Issuance date can be verified as part of the JWT verification using the `VerifyCredentialOptions` parameter, however we provide it as a separate function here. `verifyIssuanceDate` takes in the `VerifiableCredential` object.
 
 ``` shell
 const verified = verifyIssuanceDate(vc)
@@ -171,7 +171,7 @@ const verified = verifyIssuanceDate(vc)
 
 ### Credential Schema Verification
 
-If a VC contains a `credentialSchema` property, the `credentialSubject` structure can be validated using the `verifySchema` function. It takes the `VerifiableCredential` object as well as a boolean to determine how the schema should be retreived (local file=true or remote location=false)
+If a VC contains a `credentialSchema` property, the `credentialSubject` structure can be validated using the `verifySchema` function. It takes the `VerifiableCredential` object as well as a boolean to determine how the schema should be retreived (local file=true or remote location=false).
 
 ``` shell
 const verified = await verifySchema(vc, true)
