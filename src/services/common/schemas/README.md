@@ -17,7 +17,7 @@ Thus Credential Types and Schemas play an important role in defining an SSI Ecos
 The Issuer can use the `credentialSchema` property to define the data structure of the `credentialSubject` of the Verifiable Credential.  When a Verifier receives a Credential with this property defined, it can optionally choose to verify that the structure of the `credentialSubject` matches the defined schema.
 
 ### Examples
-The 4 Credential Types provided in this SDK are [`proofOfAddress`](definitions/proofOfAddress.json), [`proofOfName`](definitions/proofOfName.json), [`balanceCredential`](definitions/proofOfBalance.json), [`verifiedCustomer`](definitions/verifiedCustomer.json). The schemas for these types are defined in the [definitions](definitions) folder as json files.
+The 4 Credential Types provided in this SDK are [`proofOfAddress`](definitions/proofOfAddress.json), [`proofOfName`](definitions/proofOfName.json), [`balanceCredential`](definitions/balanceCredential.json), [`verifiedCustomer`](definitions/verifiedCustomer.json). The schemas for these types are defined in the [definitions](definitions) folder as json files.
 
 ### How to Create
 
