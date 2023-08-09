@@ -32,7 +32,7 @@ The SDK provides functionality to create a DID. Options available are did:key or
         rpcUrl: 'https://rpc-mumbai.maticvigil.com/', 
         registry: "0x41D788c9c5D335362D713152F407692c5EEAfAae"}
     
-    const didEthr = new EthrDIDMethod(ethrProvider)
+    const didEthr = new EthrDIDMethod(ethrProvider);
     const holderEthrDid = await didEthr.create();
 ```
 
@@ -97,7 +97,7 @@ const vcs = []
 
 // Presentation Payload object
 const vp = await createPresentation(
-    subjectDid, vcs)
+    subjectDid, vcs);
 
 ```
 
@@ -114,14 +114,14 @@ The code below separates VP creation and VP signature into 2 function calls to c
 ```shell
 
     // create the unsigned vp
-    const vp = await createPresentation(...)
+    const vp = await createPresentation(...);
 
     // define any signing options
-    const options: CreatePresentationOptions
+    const options: CreatePresentationOptions;
 
     // create a jwt signing service object and provide keys to sign the VP with the provided options
-    const jwtService = new JWTService()
-    const jwt = await jwtService.signVP(holderDid, vp, options)
+    const jwtService = new JWTService();
+    const jwt = await jwtService.signVP(holderDid, vp, options);
 ```
 
 #### Combine VC creation and signing
@@ -134,7 +134,7 @@ The code below uses the combined `createAndSignPresentationJWT` to create a sign
     const subjectDID = await didEthr.create();
 
     // define any signing options
-    const options: CreatePresentationOptions
+    const options: CreatePresentationOptions;
 
     // returns the signed VP as a JWT string
     const vpJwt = await createAndSignPresentationJWT(
