@@ -123,6 +123,8 @@ const resultVp = await verifyPresentationJWT(jwtVP, didResolver)
 console.log(resultVp)
 ```
 
+For more examples of how to use the SDK, check out our [onyx-ssi-sdk-examples repo](https://github.com/jpmorganchase/onyx-ssi-sdk-examples)
+
 ## Open Source Identity Packages
 * [did-resolver](https://github.com/decentralized-identity/did-resolver)
 * [ethr-did-resolver](https://github.com/decentralized-identity/ethr-did-resolver)
