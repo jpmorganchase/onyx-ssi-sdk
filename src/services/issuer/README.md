@@ -68,10 +68,22 @@ Common parameters include:
 * `termsOfUse` - tells the recipient what actions it needs to follow to accept the Credential
 * `evidence` - additional supporting information about the Credential claims
 
+#### Credential Creation
+`createCredential` creates an unsigned Verifiable Credential object.
+
+``` shell
+function createCredential(
+    issuerDID: DID,
+    subjectDID: DID,
+    credentialSubject: CredentialSubject,
+    credentialType: string,
+    additionalProperties?: Partial<CredentialPayload>
+) : CredentialPayload
+```
 
 #### CredentialPayload Type
 
-This type defines the [W3C Verifiable Credential](https://www.w3.org/TR/vc-data-model/#basic-concepts). [`CredentialPayload`](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts#L100) is defined in did-jwt-vc.  
+This type defines a W3C Verifiable Credential. [`CredentialPayload`](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts#L100) is defined in did-jwt-vc.  
 
 ```shell
 
@@ -90,19 +102,7 @@ type CredentialPayload {
   termsOfUse?: any
 }
 ```
-#### Credential Usage
-
-`createCredential` creates an unsigned Verifiable Credential object.
-
-``` shell
-function createCredential(
-    issuerDID: DID,
-    subjectDID: DID,
-    credentialSubject: CredentialSubject,
-    credentialType: string,
-    additionalProperties?: Partial<CredentialPayload>
-) : CredentialPayload
-```
+#### Create Credential Usage
 
 ```shell
 
