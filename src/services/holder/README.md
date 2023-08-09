@@ -86,7 +86,7 @@ type PresentationPayload {
 type VerifiableCredential = JWT | Verifiable<W3CCredential>
 ```
 
-#### Presentation Usage
+#### Create Presentation Usage
 
 ```shell
 
