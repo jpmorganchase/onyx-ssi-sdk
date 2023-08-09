@@ -45,7 +45,7 @@ See did:ethr for provider details
 
 An Issuer determines the types of Credentials it will issue. Each of those Credential Types has a set of claims that form the `credentialSubject` property of a VC. The structure of these claims is defined by a schema. Schemas tell Holders what kind of information will be included in the VC and provide the Verifiers a way to confirm that the claims of the VCs are of the correct type and format. Schemas should be accessible by all entities of the SSI ecosystem. The implementation of schema management is determined by the SSI ecosystem, but this SDK provides some helper functions.
 
-Currently this SDK provides functionality to retrieve schemas from a local file location or a remote URL location. See here for [more details](../common/schemas/README.md)
+Currently this SDK provides functionality to retrieve schemas from a local file location or a remote URL location. See here for [more details](../common/schemas/README.md#how-to-create)
 
 Once an Issuer has defined the credential types and schemas it will use for its VCs, the `credentialSchema` property of the VC can be used. See the [example](#credentialschema) below for how to add a schema to a VC.
 
