@@ -21,7 +21,7 @@ A JWT consists of 3 parts: `[header].[payload].[signature]`
 
 A Verifiable Credential can be encoded into JWT claims with the signature being a JWS. The [W3C Spec](https://www.w3.org/TR/vc-data-model/#jwt-encoding) outlines the details of this conversion.
 
-The JWT Credential represents an external proof type of the W3C standard, as the proof wraps the Credential data model, instead of being included in the data, as with the JSON-LD proof type
+The JWT Credential represents an external proof type of the W3C standard, as the proof wraps the Credential data model, instead of being included in the data, as with the JSON-LD proof type.
 
 ### JSON-LD Basics
 
@@ -48,7 +48,7 @@ The SDK implementation of the JWT proof type relies on the [did-jwt-vc](https://
 
 Signing a VC requires an `Issuer`, `CredentialPayload` and `CreateCredentialOptions` as inputs to the `createVerifiableCredentialJwt` function in [did-jwt-vc](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/index.ts#L75)
 
-Signing a VP requires an `Issuer`, `PresentationPayload` and `CreatePresentationOptions` as inputs to the `createVerifiablePresentationJwt` function in [did-jwt-vc](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/index.ts#L134)
+Signing a VP requires an `Issuer`, `PresentationPayload` and `CreatePresentationOptions` as inputs to the [`createVerifiablePresentationJwt`](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/index.ts#L134) function in did-jwt-vc
 #### Signing Options
 
 [did-jwt-vc](https://github.com/decentralized-identity/did-jwt-vc) allows for more complex signing options from the `CreateCredentialOptions` and `CreatePresentationOptions` types. Below is a brief descriptions of those types, however please reference [did-jwt-vc types](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts) for full understanding of usage.
