@@ -75,7 +75,7 @@ interface KeyPair {
 
 #### Resolve
 
-`resolve` returns `DIDResolutionResult` from [did-resolver](https://github.com/decentralized-identity/did-resolver/blob/master/src/resolver.ts#L27)
+`resolve` returns [`DIDResolutionResult`](https://github.com/decentralized-identity/did-resolver/blob/master/src/resolver.ts#L27) from did-resolver
 
 ``` shell
 interface DIDResolutionResult {
