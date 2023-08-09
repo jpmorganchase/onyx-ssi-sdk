@@ -23,7 +23,7 @@ The 4 Credential Types provided in this SDK are [`proofOfAddress`](src/services/
 
 When defining a new schema, the `$schema` property needs to be specified so the defined schema can be validated.
 
-To use a new schema in a VC, define a schema as a JSON file and add to the [definitions](src/services/common/schemas/definitions) folder.
+To use a new schema in a VC, define a schema as a JSON file and add to the [definitions](definitions) folder.
 
 Two helper functions are provided to retrieve the schema as a `JSONSchema` object.
 * `getSchemaRemote` can be used for remotely hosted schemas. Specify the remote location to retrieve the schema as a `JsonSchema` object. 
