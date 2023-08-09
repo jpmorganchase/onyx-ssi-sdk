@@ -177,7 +177,7 @@ const additionalParams = {
 
 The essential component of Verifiable Credentials is that they are digitally signed by the Entity that creates and issues them. Signing the Credential ensures that the Verifier can prove that the Credential has not been tampered with and that the Issuer defined in the Credential is the Entity that signed the Credential.
 
-This SDK currently only supports JWT.
+This SDK currently only supports [JWT](../common/signatures/README.md#jwt).
 
 #### Separate VC Creation and Signing
 
