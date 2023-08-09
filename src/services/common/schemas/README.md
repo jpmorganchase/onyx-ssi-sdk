@@ -2,9 +2,9 @@
 
 ## Schema Management
 
-An important part of an SSI ecoystem is the ability for Issuers, Holders, and Verifiers to understand the types of Verifiable Credentials supported in the Ecosystem.  The Issuers are the Entities that define the types of Credentials they will issue to Holders. The Holders need to know what data will be included the Credentials they want to claim. And the Verifiers need to define the types of Credentials they will accept and know how to verify them.
+An important part of an SSI ecosystem is the ability for Issuers, Holders, and Verifiers to understand the types of Verifiable Credentials supported in the Ecosystem.  The Issuers are the Entities that define the types of Credentials they will issue to Holders. The Holders need to know what data will be included the Credentials they want to claim. And the Verifiers need to define the types of Credentials they will accept and know how to verify them.
 
-Thus Credential Types and Schemas play an important role in defining an SSI Ecosystem. The Operator of an SSI Ecosystem can choose how they want to make the Credential Types and Schemas known to the participants. This SDK provides the ability to locally define Credential Types and Schemas and import them as JSON schemas. In future editions, these definitions may be moved to a separate repository for easier maintenance. Helper functions will be provided to assist in an Ecosystem's Schema managment solution. This could be hosting remotely, storage on a blockchain, IPFS, etc.
+Thus Credential Types and Schemas play an important role in defining an SSI Ecosystem. The Operator of an SSI Ecosystem can choose how they want to make the Credential Types and Schemas known to the participants. This SDK provides the ability to locally define Credential Types and Schemas and import them as JSON schemas. In future editions, these definitions may be moved to a separate repository for easier maintenance. Helper functions will be provided to assist in an Ecosystem's Schema management solution. This could be hosting remotely, storage on a blockchain, IPFS, etc.
 
 ### Credential Type
 
