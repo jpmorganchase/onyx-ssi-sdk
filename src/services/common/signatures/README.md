@@ -19,7 +19,7 @@ A JWT consists of 3 parts: `[header].[payload].[signature]`
 * The Payload consists of the claims
 * The Signature is the digital signature (JWS)
 
-A Verifiable Credential can be encoded into JWT claims with the signature being a JWS. The [W3C Spec](https://www.w3.org/TR/vc-data-model/#jwt-encoding) outlines the details of this conversion.
+A Verifiable Credential can be encoded into JWT claims with the signature being a JWS. The W3C Spec outlines the [details of this conversion](https://www.w3.org/TR/vc-data-model/#jwt-encoding).
 
 The JWT Credential represents an external proof type of the W3C standard, as the proof wraps the Credential data model, instead of being included in the data, as with the JSON-LD proof type.
 
