@@ -10,7 +10,7 @@ The Holders in an SSI Ecosystem are the Entities to whom a Verifiable Credential
 
 ### Create DID
 
-To claim a Verifiable Credential from an Issuer, a Holder needs to identify themselves with a DID. To create a Verifiable Presentation to present to a Verifier, the Holder needs to sign the requested Verifiable Credentials with its private key that corresponds to its DID. 
+To claim a Verifiable Credential from an Issuer, a Holder needs to identify themselves with a DID. To create a Verifiable Presentation(VP) to present to a Verifier, the Holder needs to sign the requested Verifiable Credentials with its private key that corresponds to its DID. 
 
 The SDK provides functionality to create a DID. Options available are did:key or did:ethr.
 
@@ -51,9 +51,9 @@ Optional parameters can be specified according to the [VC spec](https://www.w3.o
 * `verifier` - list of verifiers the Presentation is intended for
 
 
-#### PresentationPayload interface
+#### PresentationPayload Interface
 
-This type defines a [W3C Verifiable Presentation](https://www.w3.org/TR/vc-data-model/#presentations-0) object. It is defined in [did-jwt-vc](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts#L152).  
+This type defines a [W3C Verifiable Presentation](https://www.w3.org/TR/vc-data-model/#presentations-0) object. [`PresentationPayload`](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts#L152) is defined in did-jwt-vc.  
 
 ```shell
 type PresentationPayload {
@@ -70,7 +70,7 @@ type PresentationPayload {
 
 #### VerifiableCredential type
 
-This type defines a signed Verifiable Credential and is defined in [did-jwt-vc](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts#L191). 
+[`VerifiableCredential`](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts#L191) defines a signed Verifiable Credential and is defined in did-jwt-vc. 
 
 ``` shell
 type VerifiableCredential = JWT | Verifiable<W3CCredential>
@@ -78,7 +78,7 @@ type VerifiableCredential = JWT | Verifiable<W3CCredential>
 
 #### Presentation Usage
 
-`createPresentation` creates an unsigned Verifiable Presentation
+`createPresentation` creates an unsigned Verifiable Presentation.
 
 ``` shell
 function createPresentation(
@@ -105,9 +105,9 @@ const vp = await createPresentation(
 
 The essential component of Verifiable Presentations is that they are digitally signed by the Entity that creates and presents them. Signing the Presentation ensures that the Verifier can prove that the Presentation and included Credentials have not been tampered with and that the Holder defined in the Presentation is the Entity that signed the Presentation.
 
-This SDK currently only supports JWT.
+This SDK currently only supports [JWT](../common/signatures).
 
-#### Separate VC creation and Signing
+#### Separate VP Creation and Signing
 
 The code below separates VP creation and VP signature into 2 function calls to create a signed JWT.
 
@@ -124,7 +124,7 @@ The code below separates VP creation and VP signature into 2 function calls to c
     const jwt = await jwtService.signVP(holderDid, vp, options)
 ```
 
-#### Combine VC creation and signing
+#### Combine VP Creation and Signing
 
 The code below uses the combined `createAndSignPresentationJWT` to create a signed JWT.
 
@@ -145,9 +145,7 @@ The code below uses the combined `createAndSignPresentationJWT` to create a sign
 
 #### Presentation options
 
-`CreatePresentationOptions` is defined in [did-jwt-vc](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts#L305).
-
-
+[`CreatePresentationOptions`](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts#L305) is defined in did-jwt-vc.
 
 ```shell
 interface CreatePresentationOptions {
