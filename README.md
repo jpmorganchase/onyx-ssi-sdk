@@ -1,5 +1,7 @@
 # Onyx SSI SDK
 
+
+
 Create SSI Ecosystems following W3C Standards for [Verifiable Credentials](https://www.w3.org/TR/vc-data-model/) and [DIDs](https://www.w3.org/TR/did-core/)
 
 * Create and verify Verifiable Credentials and Verifiable Presentations
