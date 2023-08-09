@@ -106,7 +106,7 @@ const vp = await createPresentation(
 
 The essential component of Verifiable Presentations is that they are digitally signed by the Entity that creates and presents them. Signing the Presentation ensures that the Verifier can prove that the Presentation and included Credentials have not been tampered with and that the Holder defined in the Presentation is the Entity that signed the Presentation.
 
-This SDK currently only supports [JWT](../common/signatures).
+This SDK currently only supports [JWT](../common/signatures/README.md#jwt).
 
 #### Separate VP Creation and Signing
 
