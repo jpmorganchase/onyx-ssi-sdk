@@ -50,6 +50,16 @@ Optional parameters can be specified according to the [VC spec](https://www.w3.o
 * `expirationDate` - when the Presentation expires
 * `verifier` - list of verifiers the Presentation is intended for
 
+#### Creating a Presentation
+
+`createPresentation` creates an unsigned Verifiable Presentation.
+
+``` shell
+function createPresentation(
+    holderDID: DID,
+    verifiableCredentials: VerifiableCredential[]
+) : PresentationPayload
+```
 
 #### PresentationPayload Interface
 
@@ -77,15 +87,6 @@ type VerifiableCredential = JWT | Verifiable<W3CCredential>
 ```
 
 #### Presentation Usage
-
-`createPresentation` creates an unsigned Verifiable Presentation.
-
-``` shell
-function createPresentation(
-    holderDID: DID,
-    verifiableCredentials: VerifiableCredential[]
-) : PresentationPayload
-```
 
 ```shell
 
