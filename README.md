@@ -50,7 +50,9 @@ npx hardhat test
 
 ## Full SSI Ecosystem Example
 
-Issuance - Claiming - Verification of W3C Credential/Presentation
+For examples of how to use the SDK, check out our [onyx-ssi-sdk-examples repo](https://github.com/jpmorganchase/onyx-ssi-sdk-examples)
+
+Below code shows the Issuance, Claiming, and Verification of W3C Credential/Presentation.
 
 ```shell
 
@@ -122,8 +124,6 @@ console.log(resultVc)
 const resultVp = await verifyPresentationJWT(jwtVP, didResolver)
 console.log(resultVp)
 ```
-
-For more examples of how to use the SDK, check out our [onyx-ssi-sdk-examples repo](https://github.com/jpmorganchase/onyx-ssi-sdk-examples)
 
 ## Open Source Identity Packages
 * [did-resolver](https://github.com/decentralized-identity/did-resolver)
