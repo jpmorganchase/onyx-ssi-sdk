@@ -1,6 +1,6 @@
 # Issuer
 
-The Issuers in an SSI Ecosystem are the Entities responsible for issuing Verifiable Credentials to Holders. Depending on the Credential type, the Issuer may need to authenticate or request some information from the Holder to create the Credential. An important part of Credential issuance is the signing of the Credential by the Issuer. The digital signature of the Credential ensures that it has not been tampered with and that it came from the Entity who signed it.
+The Issuers in an SSI Ecosystem are the Entities responsible for issuing Verifiable Credentials (VCs) to Holders. Depending on the Credential type, the Issuer may need to authenticate or request some information from the Holder to create the Credential. An important part of Credential issuance is the signing of the Credential by the Issuer. The digital signature of the Credential ensures that it has not been tampered with and that it came from the Entity who signed it.
 
 ## SDK Features
 
@@ -41,11 +41,11 @@ See did:ethr for provider details
     const holderEthrDid = await didEthr.create();
 ```
 
-### Schema management
+### Schema Management
 
 An Issuer determines the types of Credentials it will issue. Each of those Credential Types has a set of claims that form the `credentialSubject` property of a VC. The structure of these claims is defined by a schema. Schemas tell Holders what kind of information will be included in the VC and provide the Verifiers a way to confirm that the claims of the VCs are of the correct type and format. Schemas should be accessible by all entities of the SSI ecosystem. The implementation of schema management is determined by the SSI ecosystem, but this SDK provides some helper functions.
 
-Currently this SDK provides functionality to retrieve schemas from a local file location or a remote url location. [More details](../common/schemas/README.md)
+Currently this SDK provides functionality to retrieve schemas from a local file location or a remote URL location. See here for [more details](../common/schemas/README.md#how-to-create)
 
 Once an Issuer has defined the credential types and schemas it will use for its VCs, the `credentialSchema` property of the VC can be used. See the [example](#credentialschema) below for how to add a schema to a VC.
 
@@ -59,7 +59,7 @@ The properties required to create a Verifiable Credential object are:
 * Credential Type - the type of the Credential, possibly defined by a schema
 * Subject Data - the claims about the subject of the Credential
 
-Additional parameters can be specified according to the [VC spec](https://www.w3.org/TR/vc-data-model/#basic-concepts)
+Additional parameters can be specified according to the [VC spec](https://www.w3.org/TR/vc-data-model/#basic-concepts).
 
 Common parameters include: 
 * `expirationDate` - when the Credential expires
@@ -68,10 +68,22 @@ Common parameters include:
 * `termsOfUse` - tells the recipient what actions it needs to follow to accept the Credential
 * `evidence` - additional supporting information about the Credential claims
 
+#### Credential Creation
+`createCredential` creates an unsigned Verifiable Credential object.
 
-#### CredentialPayload type
+``` shell
+function createCredential(
+    issuerDID: DID,
+    subjectDID: DID,
+    credentialSubject: CredentialSubject,
+    credentialType: string,
+    additionalProperties?: Partial<CredentialPayload>
+) : CredentialPayload
+```
 
-This type defines the [W3C Verifiable Credential](https://www.w3.org/TR/vc-data-model/#basic-concepts). It is defined in [did-jwt-vc](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts#L100).  
+#### CredentialPayload Type
+
+This type defines a W3C Verifiable Credential. [`CredentialPayload`](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts#L100) is defined in did-jwt-vc.  
 
 ```shell
 
@@ -90,19 +102,7 @@ type CredentialPayload {
   termsOfUse?: any
 }
 ```
-#### Credential Usage
-
-`createCredential` creates an unsigned Verifiable Credential object
-
-``` shell
-function createCredential(
-    issuerDID: DID,
-    subjectDID: DID,
-    credentialSubject: CredentialSubject,
-    credentialType: string,
-    additionalProperties?: Partial<CredentialPayload>
-) : CredentialPayload
-```
+#### Create Credential Usage
 
 ```shell
 
@@ -131,7 +131,7 @@ const vc = await createCredential(
 
 ##### credentialSchema
 
-Location of the Credential Schema
+Use to specify the location of the Credential Schema.
 
 ``` shell
 const additionalParams = {
@@ -144,7 +144,7 @@ const additionalParams = {
 
 ##### credentialStatus
 
-Where to check the Credential's revocation status
+Use to specify where to check the Credential's revocation status.
 
 ``` shell
 const additionalParams = {
@@ -156,7 +156,7 @@ const additionalParams = {
 ```
 ##### expirationDate
 
-Date of Credential expiration - the date should be in ISO format
+Use to specify the date of Credential expiration - the date should be in ISO format.
 
 ``` shell
 
@@ -177,9 +177,9 @@ const additionalParams = {
 
 The essential component of Verifiable Credentials is that they are digitally signed by the Entity that creates and issues them. Signing the Credential ensures that the Verifier can prove that the Credential has not been tampered with and that the Issuer defined in the Credential is the Entity that signed the Credential.
 
-This SDK currently only supports JWT.
+This SDK currently only supports [JWT](../common/signatures/README.md#jwt).
 
-#### Separate VC creation and Signing
+#### Separate VC Creation and Signing
 
 The code below separates VC creation and VC signature into 2 function calls to create a JWT.
 
@@ -196,7 +196,7 @@ The code below separates VC creation and VC signature into 2 function calls to c
     const jwt = await jwtService.signVC(issuerKeyDid, vc, options)
 ```
 
-#### Combine VC creation and signing
+#### Combine VC Creation and Signing
 
 The code below uses the combined `createAndSignCredentialJWT` to create a JWT.
 
@@ -221,9 +221,9 @@ The code below uses the combined `createAndSignCredentialJWT` to create a JWT.
         options)  
 ```
 
-#### Credential Signing options
+#### Credential Signing Options
 
-`CreateCredentialOptions` is defined in [did-jwt-vc](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts#L236).
+[`CreateCredentialOptions`](https://github.com/decentralized-identity/did-jwt-vc/blob/master/src/types.ts#L236) is defined in did-jwt-vc.
 
 ```shell
 interface CreateCredentialOptions {

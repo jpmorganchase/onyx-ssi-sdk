@@ -1,8 +1,8 @@
-# DID Management
+# Decentralized Identifiers (DIDs)
 
 ## DID Overview
 
-DIDs are unique identifiers that can refer to any subject (ie: person, organization, data model, entity, thing, etc). They have been standardized by the [W3C spec](https://www.w3.org/TR/did-core/). DIDs are an essential component in an SSI Ecosystem as they give an identity to every entity.
+Decentralized Identitifiers are unique identifiers that can refer to any subject (ie: person, organization, data model, entity, thing, etc). They have been standardized by the [W3C spec](https://www.w3.org/TR/did-core/). DIDs are an essential component in an SSI Ecosystem as they give an identity to every entity.
 
 ### Characteristics of a DID
 * Decentralized: the identifier does not depend on a centralized authority to create it
@@ -49,7 +49,7 @@ The DID methods currently supported in this SDK are [did:key](https://w3c-ccg.gi
 
 Every DID method defines Create, Resolve, Update and Delete functions for the DID.
 
-The SDK provides a `DIDMethod` interface to abstract these functions
+The SDK provides a `DIDMethod` interface to abstract these functions.
 
 #### Create
 
@@ -75,7 +75,7 @@ interface KeyPair {
 
 #### Resolve
 
-`resolve` returns `DIDResolutionResult` from [did-resolver](https://github.com/decentralized-identity/did-resolver/blob/master/src/resolver.ts#L27)
+`resolve` returns [`DIDResolutionResult`](https://github.com/decentralized-identity/did-resolver/blob/master/src/resolver.ts#L27) from did-resolver
 
 ``` shell
 interface DIDResolutionResult {
@@ -93,10 +93,10 @@ If the DID method supports updating a DID, the `update` method will be implement
 
 #### Delete
 
-If the DID method supports deletion of a DID, the `deactivate` method will be implemented
+If the DID method supports deletion of a DID, the `deactivate` method will be implemented.
 
 ### Helper functions
-The SDK provides helper functions to assist with DIDs
+The SDK provides helper functions to assist with DIDs.
 
 * `isActive` provides a way to check if a given DID has an active status
 * `getIdentifier` provides a way for the Identifier portion of the DID to be extracted from the DID string
@@ -109,7 +109,7 @@ The SDK provides helper functions to assist with DIDs
 
 [did:key](https://w3c-ccg.github.io/did-method-key/) is a self resolving identifier. The public key is stored directly in the identifier of the DID, enabling local resolution. As such, did:key does not support key rotation or deactivation.
 
-SDK implementation uses [edDSA keypair algorithm](https://github.com/transmute-industries/verifiable-data/tree/main/packages/ed25519-key-pair) to create the public/private keypair and associated DID. It uses the [key-did-resolver](https://github.com/ceramicnetwork/js-did/tree/main/packages/key-did-resolver) to perform resolution to a DID Document
+SDK implementation uses [edDSA keypair algorithm](https://github.com/transmute-industries/verifiable-data/tree/main/packages/ed25519-key-pair) to create the public/private keypair and associated DID. It uses the [key-did-resolver](https://github.com/ceramicnetwork/js-did/tree/main/packages/key-did-resolver) to perform resolution to a DID Document.
 
 format: `did:key:{base58 encoded ed25519-pub public key}`
 

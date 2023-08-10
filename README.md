@@ -50,7 +50,9 @@ npx hardhat test
 
 ## Full SSI Ecosystem Example
 
-Issuance - Claiming - Verification of W3C Credential/Presentation
+For examples of how to use the SDK, check out our [onyx-ssi-sdk-examples repo](https://github.com/jpmorganchase/onyx-ssi-sdk-examples)
+
+Below code shows the Issuance, Claiming, and Verification of W3C Credential/Presentation.
 
 ```shell
 
