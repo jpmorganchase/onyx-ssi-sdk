@@ -1,9 +1,8 @@
 name: SSI-SDK Publish to Github Packages
 
 on:
-  push:
-    branches:
-      - main
+  release:
+    types: [published]
 jobs:
   build:
     runs-on: ubuntu-latest
