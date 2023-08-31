@@ -54,7 +54,7 @@ For examples of how to use the SDK, check out our [onyx-ssi-sdk-examples repo](h
 
 Below code shows the Issuance, Claiming, and Verification of W3C Credential/Presentation.
 
-```shell
+```javascript
 
 //DID Key
 const didKey = new KeyDIDMethod()
