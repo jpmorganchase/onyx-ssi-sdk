@@ -64,7 +64,7 @@ OIDC4VP functionality can be added to this `oidc` folder. Structure is up to the
 
 ## Testing
 
-The functionality added for this challenge should be unit tested. Tests can be added [here](../../../../../tests/unit) in a new `oidc` folder.
+The functionality added for this challenge should be unit tested. Tests can be added [here](../../../../tests/unit) in a new `oidc` folder.
 
 ## Criteria for Completion
 * All [functionality](#Functionality-to-Implement) for either (or both) OIDC4VC and OIDC4VP have been implemented
