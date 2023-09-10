@@ -26,7 +26,7 @@ DID methods of interest: [did:web](https://w3c-ccg.github.io/did-method-web/), [
 * If the did method uses a new Keypair algorithm, you will need to add it to the `KEY_ALG` enum in `utils/KeyUtils.ts`
 
 ### Universal Resolver Support
-The Universal Resolver is a separate service that can resolves Decentralized Identifiers (DIDs) across many different DID methods. It can be run locally via Docker.
+The Universal Resolver is a separate service that can resolve Decentralized Identifiers (DIDs) across many different DID methods. It can be run locally via Docker.
 
 * Implement an adapter to a universal resolver Instance: given the URL of the running Resolver instance, implement a `resolve` function
 * Solution should implement the [`Resolvable`](https://github.com/decentralized-identity/did-resolver/blob/master/src/resolver.ts#L330) interface
