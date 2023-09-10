@@ -138,3 +138,13 @@ console.log(resultVp)
 * [did:key spec](https://w3c-ccg.github.io/did-method-key/)
 * [did:ethr spec](https://github.com/decentralized-identity/ethr-did-resolver/blob/master/doc/did-method-spec.md)
 
+## SDK Hackathon Challenges
+As part of the hackathon we are offering 5 challenges to help improve our SDK.
+
+To participate in these challenges please fork this repo, implement your changes, and submit your branch to Encode. We are not accepting PRs on this repo through the duration of the hackathon.
+
+* [DIDs](https://github.com/jpmorganchase/onyx-ssi-sdk/blob/dids-hackathon/src/services/common/did/DIDS.md): Add support for a new DID method or support the Universal Resolver
+* [JSON-LD Credentials](https://github.com/jpmorganchase/onyx-ssi-sdk/blob/jsonld-hackathon/src/services/common/schemas/JSONLD.md): Provide support for JSON-LD Credentials
+* [Revocation](https://github.com/jpmorganchase/onyx-ssi-sdk/blob/revocation-hackathon/src/services/common/revocation/README.md): Implement a new Credential Revocation scheme
+* [SD-JWT](https://github.com/jpmorganchase/onyx-ssi-sdk/blob/sdjwt-hackathon/src/services/common/signatures/SDJWT.md): Implement the emerging SD-JWT spec for selective disclosure
+* [Communication](https://github.com/jpmorganchase/onyx-ssi-sdk/blob/oidc-hackathon/src/services/communication/oidc/README.md): Implement support for OIDC, DIDComm or Presentation Exchange
