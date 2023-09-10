@@ -7,7 +7,7 @@ Onyx is exploring how the Onyx SSI SDK can be used to enhance web3 use cases. Ma
 
 ## Sample Contracts
 
-In this branch we provide a sample [DIDRegistry](src/services/common/did/contracts/metadata/DIDRegistryOnChain.sol) and a sample [Verifier Contract](src/services/common/did/contracts/metadata/Verifier.sol). 
+In this branch we provide a sample [DIDRegistry](src/services/common/did/contracts/DIDRegistryOnChain.sol) and a sample [Verifier Contract](src/services/common/did/contracts/Verifier.sol). 
 
 ### Verifier Contract
 The Verifier contract performs verification of the Verifiable Credential, just as a Verifier service running locally or in AWS would.
