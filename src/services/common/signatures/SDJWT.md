@@ -24,7 +24,7 @@ To complete this challenge, the below should be implemented:
 
 ## Where to Start/Implementation Details
 
-A [`sdjwt.ts`](sdjwt.ts) starter file has been created to implement the sd-jwt spec for issuance, presentation, and verification of a selective disclosure Verifiable Credential
+Create a new sdjwt.ts file and implement the sd-jwt spec for issuance, presentation, and verification of a selective disclosure Verifiable Credential.
 
 ### Issuance of SD-JWT
 1. Issuer creates Verifiable Credential as usual
