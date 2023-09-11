@@ -1,3 +1,5 @@
+### NOTE - All hackathon submissions for the Digital Identity Hackathon (Sept 12 - Oct 8) need to be sent to the hackathon organizer, Encode club. PRs will not be considered as offical submissions for the Digital Identity hackathon.
+
 # Onyx SSI SDK
 
 Create SSI Ecosystems following W3C Standards for [Verifiable Credentials](https://www.w3.org/TR/vc-data-model/) and [DIDs](https://www.w3.org/TR/did-core/)
