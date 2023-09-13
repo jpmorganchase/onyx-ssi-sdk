@@ -54,7 +54,7 @@ npx hardhat test
 
 For examples of how to use the SDK, check out our [onyx-ssi-sdk-examples repo](https://github.com/jpmorganchase/onyx-ssi-sdk-examples)
 
-Below code shows the Issuance, Claiming, and Verification of W3C Credential/Presentation.
+Below code shows the VC Creation, VP Presentation and Verification of W3C Credential/Presentation.
 
 ```shell
 
@@ -127,18 +127,18 @@ const resultVp = await verifyPresentationJWT(jwtVP, didResolver)
 console.log(resultVp)
 ```
 
+## Standards and Specifications
+* [W3C Verifiable Credentials 1.0](https://www.w3.org/TR/vc-data-model/)
+* [Decentralized Identifiers v1.0](https://w3c.github.io/did-core/)
+* [did:key spec](https://w3c-ccg.github.io/did-method-key/)
+* [did:ethr spec](https://github.com/decentralized-identity/ethr-did-resolver/blob/master/doc/did-method-spec.md)
+* 
 ## Open Source Identity Packages
 * [did-resolver](https://github.com/decentralized-identity/did-resolver)
 * [ethr-did-resolver](https://github.com/decentralized-identity/ethr-did-resolver)
 * [key-did-resolver](https://github.com/ceramicnetwork/js-did/tree/main/packages/key-did-resolver)
 * [did-jwt-vc](https://github.com/decentralized-identity/did-jwt-vc)
 * [did-jwt](https://github.com/decentralized-identity/did-jwt)
-
-## Standards and Specifications
-* [W3C Verifiable Credentials 1.0](https://www.w3.org/TR/vc-data-model/)
-* [Decentralized Identifiers v1.0](https://w3c.github.io/did-core/)
-* [did:key spec](https://w3c-ccg.github.io/did-method-key/)
-* [did:ethr spec](https://github.com/decentralized-identity/ethr-did-resolver/blob/master/doc/did-method-spec.md)
 
 ## SDK Hackathon Challenges
 As part of the hackathon we are offering 5 challenges to help improve our SDK.
