@@ -132,7 +132,7 @@ console.log(resultVp)
 * [Decentralized Identifiers v1.0](https://w3c.github.io/did-core/)
 * [did:key spec](https://w3c-ccg.github.io/did-method-key/)
 * [did:ethr spec](https://github.com/decentralized-identity/ethr-did-resolver/blob/master/doc/did-method-spec.md)
-* 
+  
 ## Open Source Identity Packages
 * [did-resolver](https://github.com/decentralized-identity/did-resolver)
 * [ethr-did-resolver](https://github.com/decentralized-identity/ethr-did-resolver)
