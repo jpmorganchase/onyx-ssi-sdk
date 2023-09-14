@@ -27,6 +27,8 @@ The role of the DIDRegistry contract is the VDR (Verifiable Data Registry) for d
 
 This sample contract maintains a mapping of DID hash to DID status. A DID's status can either be Unregistered, Active or Deactivated. The DIDs are hashed to keep the DID string to a fixed length. An `isActive` function is included so the Verifier contract can check a given DID's status by calling this function.
 
+An starter DID method for this onchain contract is provided [in this repo](https://github.com/jpmorganchase/onyx-ssi-sdk/blob/onchain-hackathon/src/services/common/did/did-onchain.ts). It calls `register`, `deactivate`, and `isActive` functions on the DIDRegistryOnChain contract to implement Create and Deactivate functions of the DID. Update and Resolve are not yet implemented.
+
 ## Privacy Problem
 The [OnChain Verifiable Credential structure](src/services/common/did/contracts/IVerifier.sol#L23) has an [OnChainCredentialSubject](src/services/common/did/contracts/IVerifier.sol#L5) type where credential claims can be included. Unfortunately, if we include these claims, when the VC gets sent on chain, they are now public to anyone with access to the blockchain these contracts are deployed on.
 
