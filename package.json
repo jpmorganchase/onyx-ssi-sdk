@@ -61,6 +61,8 @@
     "@nomiclabs/hardhat-etherscan": "^3.1.0",
     "@nomiclabs/hardhat-solhint": "^2.0.1",
     "@transmute/ed25519-key-pair": "^0.7.0-unstable.80",
+    "@transmute/ed25519-signature-2018": "^0.7.0-unstable.81",
+    "@transmute/vc.js": "^0.7.0-unstable.81",
     "@typechain/ethers-v5": "^10.1.0",
     "@typechain/hardhat": "^6.1.2",
     "@types/chai": "^4.3.5",
