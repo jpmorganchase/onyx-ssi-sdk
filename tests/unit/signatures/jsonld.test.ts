@@ -42,10 +42,10 @@ describe('jsonld utilities', () => {
         verifiableCredential
     }
 
-    it('SignVC not implemented for jsonld', async () => {
+    fit('SignVC not implemented for jsonld', async () => {
         const jsonldService = new JSONLDService()
         await expect(jsonldService.signVC(didWithKeys, VC_PAYLOAD))
-            .rejects.toThrowError(Error)
+            .rejects.toThrowError("Bogus")
     })
 
     it('SignVP not implemented for jsonld', async () => {
