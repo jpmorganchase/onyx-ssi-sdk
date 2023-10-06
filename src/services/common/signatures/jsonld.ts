@@ -4,7 +4,7 @@ import { SignatureService } from "./signatures";
 import { Ed25519Signature2018, Ed25519VerificationKey2018 } from "@transmute/ed25519-signature-2018";
 import { verifiable } from '@transmute/vc.js';
 import { KeyUtils } from "../../../utils";
-import { Url, documentLoaderFactory } from "@transmute/jsonld-document-loader";
+import { Did, Url, documentLoaderFactory } from "@transmute/jsonld-document-loader";
 import axios from "axios";
 
 export class JSONLDService implements SignatureService {
@@ -29,11 +29,20 @@ export class JSONLDService implements SignatureService {
             credentialSubject: token.credentialSubject,
         };
         
+        console.log("CREDENTIAL", credential)
         const documentLoader = documentLoaderFactory.build({
             ["https://w3id.org/rebase/v1"]: async (iri: Url) => {
                 const { data } = await axios.get(iri);
                 return data;
             },
+            ["did:key"]: async (did: Did) => {
+                const endpoint = `https://api.did.actor/api/identifiers/${did}`;
+                const { data } = await axios.get(endpoint);
+                return data.didDocument;
+            },
+            ["did:ethr"]: async (_did: Did) => {
+                throw new Error('did:ethr lacks support for Ed25519 signatures');
+            }
         });
 
 
@@ -54,6 +63,7 @@ export class JSONLDService implements SignatureService {
         
     }
     async signVP(_keys: DIDWithKeys, _token: PresentationPayload, _configs?: CreatePresentationOptions | undefined): Promise<string> {
+        // https://github.com/transmute-industries/verifiable-data/tree/main/packages/vc.js#verify-presentation
         throw new Error("Method not implemented.");
     }
 
