@@ -29,7 +29,7 @@ export class JSONLDService implements SignatureService {
             credentialSubject: token.credentialSubject,
         };
         
-        console.log("CREDENTIAL", credential)
+        // https://github.com/transmute-industries/verifiable-data/tree/main/packages/jsonld-document-loader
         const documentLoader = documentLoaderFactory.build({
             ["https://w3id.org/rebase/v1"]: async (iri: Url) => {
                 const { data } = await axios.get(iri);
@@ -45,7 +45,8 @@ export class JSONLDService implements SignatureService {
             }
         });
 
-
+        // https://www.npmjs.com/package/@transmute/ed25519-signature-2018
+        // https://github.com/transmute-industries/verifiable-data/tree/main/packages/vc.js#transmutevcjs
         const vc = await verifiable.credential.create({
             credential,
             format: ["vc"],
