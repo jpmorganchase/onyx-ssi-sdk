@@ -1,4 +1,3 @@
-import axios from 'axios';
 import {
     CredentialPayload,
     CreateCredentialOptions,
@@ -10,11 +9,11 @@ import {
     Ed25519VerificationKey2018,
 } from '@transmute/ed25519-signature-2018';
 import { verifiable } from '@transmute/vc.js';
-import { Url, documentLoaderFactory } from '@transmute/jsonld-document-loader';
 import { VerifiableCredential } from '@transmute/vc.js/dist/types/VerifiableCredential';
 import { DIDWithKeys } from '../did/did';
 import { SignatureService } from './signatures';
 import { KEY_ALG, KeyUtils } from '../../../utils';
+import { ContextManager } from '../schemas';
 
 export class JSONLDService implements SignatureService {
     /**
@@ -48,7 +47,7 @@ export class JSONLDService implements SignatureService {
             credential = { ...credential, id };
         }
 
-        const documentLoader = this.createDocumentLoader();
+        const documentLoader = new ContextManager().createDocumentLoader();
 
         const vc = await verifiable.credential.create({
             credential,
@@ -89,7 +88,7 @@ export class JSONLDService implements SignatureService {
         };
 
         const key = await this.createEd25519VerificationKey(keys);
-        const documentLoader = this.createDocumentLoader();
+        const documentLoader = new ContextManager().createDocumentLoader();
 
         if (!configs?.challenge) {
             throw new Error(
@@ -136,25 +135,10 @@ export class JSONLDService implements SignatureService {
 
         return await Ed25519VerificationKey2018.from({
             id: `${did}#${id}`,
-            type: 'Ed25519VerificationKey2018', // Used for legacy and compability; Ed25519Signature2020 is for greenfield
+            type: 'Ed25519VerificationKey2018', // Used for compatibility with 'https://www.w3.org/2018/credentials/v1' context
             controller: did,
             publicKeyBase58: base58Keys.publicKey,
             privateKeyBase58: base58Keys.privateKey,
-        });
-    }
-
-    /**
-     * Creates a document loader that is responsible for mapping did contexts to a json object.
-     *
-     * @returns a document loader function
-     */
-    createDocumentLoader() {
-        // For more information see: https://github.com/transmute-industries/verifiable-data/tree/main/packages/jsonld-document-loader
-        return documentLoaderFactory.build({
-            ['https://']: async (iri: Url) => {
-                const { data } = await axios.get(iri);
-                return data;
-            },
         });
     }
 

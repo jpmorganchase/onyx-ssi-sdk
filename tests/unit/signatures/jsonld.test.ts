@@ -1,6 +1,7 @@
 import {
     DEFAULT_CONTEXT,
     JSONLDService,
+    SCHEMA_CONTEXT,
     VERIFIABLE_CREDENTIAL,
     VERIFIABLE_PRESENTATION,
 } from '../../../src/services/common';
@@ -18,10 +19,10 @@ describe('jsonld utilities', () => {
         },
     };
 
-    const context = [DEFAULT_CONTEXT];
+    const context = [DEFAULT_CONTEXT, SCHEMA_CONTEXT];
     const credentialSubject = {
         id: 'did:ethr:maticmum:0x5F880a6eB77c12Db2e14F29bfE3b1aaf94C95508',
-        // name: "Ollie" NOTE: not valid? MISSING_PROPERTIES_IN_CONTEXT credentialSubject.name
+        name: 'Ollie',
     };
     const issuer = {
         id: didWithKeys.did,
@@ -54,7 +55,10 @@ describe('jsonld utilities', () => {
         const parsedResult = JSON.parse(ldProof);
 
         expect(parsedResult).toEqual({
-            '@context': ['https://www.w3.org/2018/credentials/v1'],
+            '@context': [
+                'https://www.w3.org/2018/credentials/v1',
+                'https://schema.org/docs/jsonldcontext.jsonld',
+            ],
             type: ['VerifiableCredential', 'ProofOfName'],
             issuer: {
                 id: 'did:key:z6MknTZPNAtKXhYUC51KueL2RmJX6nMhZAbjfzV6LRv17Juz',
@@ -62,6 +66,7 @@ describe('jsonld utilities', () => {
             issuanceDate: '2023-05-18T17:34:26.000Z',
             credentialSubject: {
                 id: 'did:ethr:maticmum:0x5F880a6eB77c12Db2e14F29bfE3b1aaf94C95508',
+                name: 'Ollie',
             },
             proof: {
                 type: 'Ed25519Signature2018',
@@ -83,7 +88,10 @@ describe('jsonld utilities', () => {
         const parsedResult = JSON.parse(ldProof);
 
         expect(parsedResult).toEqual({
-            '@context': ['https://www.w3.org/2018/credentials/v1'],
+            '@context': [
+                'https://www.w3.org/2018/credentials/v1',
+                'https://schema.org/docs/jsonldcontext.jsonld',
+            ],
             type: ['VerifiableCredential', 'ProofOfName'],
             issuer: {
                 id: 'did:key:z6MknTZPNAtKXhYUC51KueL2RmJX6nMhZAbjfzV6LRv17Juz',
@@ -92,6 +100,7 @@ describe('jsonld utilities', () => {
             issuanceDate: '2023-05-18T17:34:26.000Z',
             credentialSubject: {
                 id: 'did:ethr:maticmum:0x5F880a6eB77c12Db2e14F29bfE3b1aaf94C95508',
+                name: 'Ollie',
             },
             proof: {
                 type: 'Ed25519Signature2018',
@@ -104,7 +113,7 @@ describe('jsonld utilities', () => {
         });
     });
 
-    it('fails signVC if using keys not encrypted with EdDSA', async () => {
+    it('signVC fails if using keys not encrypted with EdDSA', async () => {
         // invalid didWithKeys
         const invalidDidWithKeys = {
             did: 'did:key:z6MknTZPNAtKXhYUC51KueL2RmJX6nMhZAbjfzV6LRv17Juz',
@@ -120,6 +129,16 @@ describe('jsonld utilities', () => {
         await expect(
             jsonldService.signVP(invalidDidWithKeys, VP_PAYLOAD),
         ).rejects.toThrowError(Error);
+    });
+
+    it('SignVC throws an error if a context is missing with additional properties', async () => {
+        const jsonldService = new JSONLDService();
+        await expect(
+            jsonldService.signVC(didWithKeys, {
+                ...VC_PAYLOAD,
+                '@context': [DEFAULT_CONTEXT],
+            }),
+        ).rejects.toThrowError('credential is not valid JSON-LD:');
     });
 
     it('SignVP throws error for missing challenge', async () => {
@@ -141,7 +160,10 @@ describe('jsonld utilities', () => {
         const parsedResult = JSON.parse(vpResult);
 
         expect(parsedResult).toEqual({
-            '@context': ['https://www.w3.org/2018/credentials/v1'],
+            '@context': [
+                'https://www.w3.org/2018/credentials/v1',
+                'https://schema.org/docs/jsonldcontext.jsonld',
+            ],
             type: 'VerifiablePresentation',
             holder: 'did:key:z6MknTZPNAtKXhYUC51KueL2RmJX6nMhZAbjfzV6LRv17Juz',
             proof: {
