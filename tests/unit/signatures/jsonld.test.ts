@@ -122,10 +122,37 @@ describe('jsonld utilities', () => {
         ).rejects.toThrowError(Error);
     });
 
-    it('SignVP not implemented for jsonld', async () => {
+    it('SignVP throws error for missing challenge', async () => {
         const jsonldService = new JSONLDService();
         await expect(
             jsonldService.signVP(didWithKeys, VP_PAYLOAD),
-        ).rejects.toThrowError(Error);
+        ).rejects.toThrowError(
+            'A challenge is required for a verifiable presentation.',
+        );
+    });
+
+    it('SignVP successfully signs a jsonld proof', async () => {
+        const jsonldService = new JSONLDService();
+
+        const vpResult = await jsonldService.signVP(didWithKeys, VP_PAYLOAD, {
+            challenge: 'jasonschallenge',
+        });
+
+        const parsedResult = JSON.parse(vpResult);
+
+        expect(parsedResult).toEqual({
+            '@context': ['https://www.w3.org/2018/credentials/v1'],
+            type: 'VerifiablePresentation',
+            holder: 'did:key:z6MknTZPNAtKXhYUC51KueL2RmJX6nMhZAbjfzV6LRv17Juz',
+            proof: {
+                type: 'Ed25519Signature2018',
+                created: expect.any(String) as string, // Only need to know field is populated
+                verificationMethod:
+                    'did:key:z6MknTZPNAtKXhYUC51KueL2RmJX6nMhZAbjfzV6LRv17Juz#z6MknTZPNAtKXhYUC51KueL2RmJX6nMhZAbjfzV6LRv17Juz',
+                proofPurpose: 'authentication',
+                challenge: 'jasonschallenge',
+                jws: expect.any(String) as string, // Only need to know field is populated as it changes each time it is ran
+            },
+        });
     });
 });

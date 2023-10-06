@@ -50,8 +50,6 @@ export class JSONLDService implements SignatureService {
 
         const documentLoader = this.createDocumentLoader();
 
-        // https://www.npmjs.com/package/@transmute/ed25519-signature-2018
-        // https://github.com/transmute-industries/verifiable-data/tree/main/packages/vc.js#transmutevcjs
         const vc = await verifiable.credential.create({
             credential,
             format: ['vc'],
@@ -63,21 +61,49 @@ export class JSONLDService implements SignatureService {
             }),
         });
 
-        // Stringify the credential for compability between languages
-        // and conform to the SignatureService's function signature
-
         if (vc.items.length === 0) {
             throw new Error('There are no items found in the credential.');
         }
+        // Stringify the credential for compability between languages
+        // and conform to the SignatureService's function signature
         return JSON.stringify(vc.items[0]);
     }
     async signVP(
-        _keys: DIDWithKeys,
-        _token: PresentationPayload,
-        _configs?: CreatePresentationOptions | undefined,
+        keys: DIDWithKeys,
+        token: PresentationPayload,
+        configs?: CreatePresentationOptions | undefined,
     ): Promise<string> {
-        // https://github.com/transmute-industries/verifiable-data/tree/main/packages/vc.js#verify-presentation
-        throw new Error('Method not implemented.');
+        const { type, holder } = token;
+        const presentation = {
+            '@context': token['@context'],
+            type,
+            holder,
+        };
+
+        const key = await this.createEd25519VerificationKey(keys);
+        const documentLoader = this.createDocumentLoader();
+
+        if (!configs?.challenge) {
+            throw new Error(
+                'A challenge is required for a verifiable presentation.',
+            );
+        }
+
+        const vp = await verifiable.presentation.create({
+            presentation,
+            format: ['vp'],
+            challenge: configs?.challenge,
+            documentLoader,
+            suite: new Ed25519Signature2018({
+                key,
+            }),
+        });
+
+        if (vp.items.length === 0) {
+            throw new Error('There are no items found in the credential.');
+        }
+
+        return JSON.stringify(vp.items[0]);
     }
 
     /**
@@ -110,7 +136,7 @@ export class JSONLDService implements SignatureService {
     }
 
     createDocumentLoader() {
-        // https://github.com/transmute-industries/verifiable-data/tree/main/packages/jsonld-document-loader
+        // For more information see: https://github.com/transmute-industries/verifiable-data/tree/main/packages/jsonld-document-loader
         return documentLoaderFactory.build({
             ['https://']: async (iri: Url) => {
                 const { data } = await axios.get(iri);
