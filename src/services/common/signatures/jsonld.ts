@@ -68,6 +68,14 @@ export class JSONLDService implements SignatureService {
         // and conform to the SignatureService's function signature
         return JSON.stringify(vc.items[0]);
     }
+
+    /**
+     *
+     * @param keys `DIDWithKeys` - the DID and the keypair that will sign the token
+     * @param token `PresentationPayload` the credential to for presentation
+     * @param configs `CreatePresentationOptions` options needed to create a verifiable presentation
+     * @returns
+     */
     async signVP(
         keys: DIDWithKeys,
         token: PresentationPayload,
@@ -135,6 +143,11 @@ export class JSONLDService implements SignatureService {
         });
     }
 
+    /**
+     * Creates a document loader that is responsible for mapping did contexts to a json object.
+     *
+     * @returns a document loader function
+     */
     createDocumentLoader() {
         // For more information see: https://github.com/transmute-industries/verifiable-data/tree/main/packages/jsonld-document-loader
         return documentLoaderFactory.build({
