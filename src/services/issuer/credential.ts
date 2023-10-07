@@ -15,6 +15,7 @@ import {
     VerifiableCredential,
 } from 'did-jwt-vc';
 import { JWTPayload } from 'did-jwt';
+import { isString } from 'lodash';
 
 /**
  * Creates a {@link CredentialPayload} from supplied Issuer DID, subject DID,
@@ -48,7 +49,7 @@ export function createCredential(
 
     credential['@context'] = [DEFAULT_CONTEXT];
     if (additionalProperties && additionalProperties['@context']) {
-        typeof additionalProperties['@context'] === 'string'
+        isString(additionalProperties['@context'])
             ? credential['@context'].push(additionalProperties['@context'])
             : credential['@context'].concat(additionalProperties['@context']);
     }
@@ -140,7 +141,7 @@ export async function createAndSignCredentialJWT(
     additionalProperties?: Partial<CredentialPayload>,
     options?: CreateCredentialOptions,
 ): Promise<string> {
-    const payload = await createCredential(
+    const payload = createCredential(
         issuer.did,
         subjectDID,
         credentialSubject,
@@ -162,8 +163,11 @@ export async function createAndSignCredentialJSONLD(
     const additionalProps = {
         ...additionalProperties,
         '@context':
-            additionalProperties?.['@context'] !== undefined
-                ? additionalProperties.push(SCHEMA_CONTEXT)
+            additionalProperties &&
+            additionalProperties['@context'] !== undefined
+                ? isString(additionalProperties['@context'])
+                    ? [additionalProperties['@context'], SCHEMA_CONTEXT]
+                    : [...additionalProperties['@context'], SCHEMA_CONTEXT]
                 : [SCHEMA_CONTEXT],
     };
     const payload = createCredential(
