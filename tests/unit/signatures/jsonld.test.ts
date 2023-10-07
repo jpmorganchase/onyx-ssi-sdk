@@ -39,7 +39,29 @@ describe('jsonld utilities', () => {
     };
     const holder = didWithKeys.did;
     const verifiableCredential = [
-        'eyJhbGciOiJFUzI1NksiLCJ0eXAiOiJKV1QifQ.eyJleHAiOjE3MDQxMzcwMDQsInZjIjp7IkBjb250ZXh0IjpbImh0dHBzOi8vd3d3LnczLm9yZy8yMDE4L2NyZWRlbnRpYWxzL3YxIl0sInR5cGUiOlsiVmVyaWZpYWJsZUNyZWRlbnRpYWwiLCJQcm9vZk9mTmFtZSJdLCJjcmVkZW50aWFsU3ViamVjdCI6eyJuYW1lIjoiT2xsaWUifSwiY3JlZGVudGlhbFNjaGVtYSI6eyJpZCI6Imh0dHBzOi8vZXhhbXBsZS5vcmcvZXhhbXBsZXMvZGVncmVlLmpzb24iLCJ0eXBlIjoiSnNvblNjaGVtYVZhbGlkYXRvcjIwMTgifSwiY3JlZGVudGlhbFN0YXR1cyI6eyJpZCI6Imh0dHBzOi8vZXhhbXBsZS5lZHUvc3RhdHVzLzI0IiwidHlwZSI6IkNyZWRlbnRpYWxTdGF0dXNMaXN0MjAxNyJ9fSwic3ViIjoiZGlkOmV0aHI6bWF0aWNtdW06MHg1Rjg4MGE2ZUI3N2MxMkRiMmUxNEYyOWJmRTNiMWFhZjk0Qzk1NTA4IiwianRpIjoiZGlkOmV0aHI6bWF0aWNtdW06MHgyMGIxY0JCNTU0MjU5Rjc2MzZGQjQ4NzUzNkExN0UwRTcyMjQ4MzY4IiwibmJmIjoxNjg0NDMxMjY2LCJpc3MiOiJkaWQ6ZXRocjptYXRpY211bToweDQzODMzYWVCYzAxOGVkYzU4RDc3NjViYUI0OUI2MWM2RDFlOWQ1NGYifQ.hX-56L8cspoihl7tNYJwuvqhnW3XRYbJY1Hsu5HAEgJFcZGG-3yD2qCgawzLKT2twf9fcz8nBccbCuiyonUjAg',
+        {
+            '@context': [
+                'https://www.w3.org/2018/credentials/v1',
+                'https://schema.org/docs/jsonldcontext.jsonld',
+            ],
+            type: ['VerifiableCredential', 'ProofOfName'],
+            issuer: {
+                id: 'did:key:z6MknTZPNAtKXhYUC51KueL2RmJX6nMhZAbjfzV6LRv17Juz',
+            },
+            issuanceDate: '2023-05-18T17:34:26.000Z',
+            credentialSubject: {
+                id: 'did:ethr:maticmum:0x5F880a6eB77c12Db2e14F29bfE3b1aaf94C95508',
+                name: 'Ollie',
+            },
+            proof: {
+                type: 'Ed25519Signature2018',
+                created: '2023-10-07T20:19:38Z',
+                verificationMethod:
+                    'did:key:z6MknTZPNAtKXhYUC51KueL2RmJX6nMhZAbjfzV6LRv17Juz#z6MknTZPNAtKXhYUC51KueL2RmJX6nMhZAbjfzV6LRv17Juz',
+                proofPurpose: 'assertionMethod',
+                jws: 'eyJhbGciOiJFZERTQSIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..ChSGNIRN8MCACFGgZ6DAwE2ysTYHgr7ZvwktrBwejp8MbdIn6zDGcGY9HSpvdF9cqA_NXfz78ZlWsUZTC4mNBQ',
+            },
+        },
     ];
 
     const VP_PAYLOAD = {
@@ -175,6 +197,7 @@ describe('jsonld utilities', () => {
                 challenge: 'jasonschallenge',
                 jws: expect.any(String) as string, // Only need to know field is populated as it changes each time it is ran
             },
+            verifiableCredential: { ...verifiableCredential[0] },
         });
     });
 });

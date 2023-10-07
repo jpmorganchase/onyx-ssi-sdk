@@ -80,13 +80,26 @@ export class JSONLDService implements SignatureService {
         token: PresentationPayload,
         configs?: CreatePresentationOptions | undefined,
     ): Promise<string> {
-        const { type, holder } = token;
+        const { type, holder, verifiableCredential } = token;
+
+        if (verifiableCredential?.length === 0) {
+            throw new Error('Missing verifiable credential');
+        }
+
+        // If it is a string we can assume it is JWT and we need to decode it.
+        if (typeof verifiableCredential?.[0] === 'string') {
+            throw new Error(
+                'JWT token is insufficient data for the presentation.',
+            );
+        }
+        const vc = verifiableCredential?.[0] as VerifiableCredential;
+
         const presentation = {
             '@context': token['@context'],
             type,
             holder,
+            verifiableCredential: vc,
         };
-
         const key = await this.createEd25519VerificationKey(keys);
         const documentLoader = new ContextManager().createDocumentLoader();
 
@@ -99,7 +112,7 @@ export class JSONLDService implements SignatureService {
         const vp = await verifiable.presentation.create({
             presentation,
             format: ['vp'],
-            challenge: configs?.challenge,
+            challenge: configs.challenge,
             documentLoader,
             suite: new Ed25519Signature2018({
                 key,
