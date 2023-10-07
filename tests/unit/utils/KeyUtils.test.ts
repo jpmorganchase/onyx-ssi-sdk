@@ -124,7 +124,7 @@ describe('key utilities', () => {
         const keys = KeyUtils.encodeToBase58(ethrKeys.keyPair)
         expect(keys).toEqual({
             privateKey: "FHCrE9cdRAsUPZnekn3NLqpA3wrE3bSMZbxEpYiarp4t", 
-            publicKey: "bEFmiyrTt15wzXeE6b1HgDpFF8ji4JZmJQSt2qqABaKNK3pPnbpxAz86rcrpYERowhc"
+            publicKey: "sdHeQWTwoA91yu2YMsBs9HruxAAe6ribkmBqXhpAKVeJ"
         })
     })
 })

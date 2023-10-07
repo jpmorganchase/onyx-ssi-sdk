@@ -78,17 +78,21 @@ export class KeyUtils {
     static encodeToBase58(keys: KeyPair): Omit<KeyPair, 'algorithm'> {    
         const { publicKey, privateKey } = keys
 
-        const pubString = !isString(publicKey) ? bs58.encode(publicKey) : publicKey
-        const pubKey = this.isHexPrivateKey(pubString) 
-            ? bs58.encode(Buffer.from(pubString, 'hex')) 
-            : bs58.encode(Buffer.from(pubString, 'base64')) 
+        let pubKeyBytes = !isString(publicKey) ? Buffer.from(publicKey) : (
+            this.isHexPublicKey(publicKey)
+            ? Buffer.from(publicKey.replace(/^0x/,''), 'hex')
+            : Buffer.from(publicKey, 'base64')
+        )
+        let pubKeyBs58 = bs58.encode(pubKeyBytes)
 
-        const privString = !isString(privateKey) ? bs58.encode(privateKey) : privateKey
-        const privKey = this.isHexPrivateKey(privString) 
-            ? bs58.encode(Buffer.from(privString.replace(/^0x/,''), 'hex')) 
-            : bs58.encode(Buffer.from(privString, 'base64')) 
+        let privKeyBytes = !isString(privateKey) ? Buffer.from(privateKey) : (
+            this.isHexPrivateKey(privateKey)
+            ? Buffer.from(privateKey.replace(/^0x/,''), 'hex')
+            : Buffer.from(privateKey, 'base64')
+        )
+        let privKeyBs58 = bs58.encode(privKeyBytes)
 
-        return { publicKey: pubKey, privateKey: privKey}
+        return { publicKey: pubKeyBs58, privateKey: privKeyBs58 }
     }
 
     
