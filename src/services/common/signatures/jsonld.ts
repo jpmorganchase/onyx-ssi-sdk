@@ -30,17 +30,14 @@ export class JSONLDService implements SignatureService {
     ): Promise<string> {
         const key = await this.createEd25519VerificationKey(keys);
 
-        const { id, type, issuer, issuanceDate, credentialSubject } = token;
+        const { id, issuanceDate } = token;
 
         let credential: VerifiableCredential = {
-            '@context': token['@context'],
-            type,
-            issuer,
+            ...token,
             issuanceDate:
                 issuanceDate instanceof Date
                     ? issuanceDate.toISOString()
                     : issuanceDate,
-            credentialSubject,
         };
 
         if (id !== undefined) {
@@ -80,7 +77,7 @@ export class JSONLDService implements SignatureService {
         token: PresentationPayload,
         configs?: CreatePresentationOptions | undefined,
     ): Promise<string> {
-        const { type, holder, verifiableCredential } = token;
+        const { verifiableCredential } = token;
 
         if (verifiableCredential?.length === 0) {
             throw new Error('Missing verifiable credential');
@@ -95,9 +92,7 @@ export class JSONLDService implements SignatureService {
         const vc = verifiableCredential?.[0] as VerifiableCredential;
 
         const presentation = {
-            '@context': token['@context'],
-            type,
-            holder,
+            ...token,
             verifiableCredential: vc,
         };
         const key = await this.createEd25519VerificationKey(keys);

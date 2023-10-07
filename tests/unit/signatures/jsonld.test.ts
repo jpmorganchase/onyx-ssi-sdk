@@ -101,6 +101,40 @@ describe('jsonld utilities', () => {
         });
     });
 
+    it('SignVC for jsonld using did:key with an expiration', async () => {
+        const jsonldService = new JSONLDService();
+        const ldProof = await jsonldService.signVC(didWithKeys, {
+            ...VC_PAYLOAD,
+            expirationDate: '2023-05-18T17:34:26.000Z',
+        });
+        const parsedResult = JSON.parse(ldProof);
+
+        expect(parsedResult).toEqual({
+            '@context': [
+                'https://www.w3.org/2018/credentials/v1',
+                'https://schema.org/docs/jsonldcontext.jsonld',
+            ],
+            type: ['VerifiableCredential', 'ProofOfName'],
+            issuer: {
+                id: 'did:key:z6MknTZPNAtKXhYUC51KueL2RmJX6nMhZAbjfzV6LRv17Juz',
+            },
+            issuanceDate: '2023-05-18T17:34:26.000Z',
+            expirationDate: '2023-05-18T17:34:26.000Z',
+            credentialSubject: {
+                id: 'did:ethr:maticmum:0x5F880a6eB77c12Db2e14F29bfE3b1aaf94C95508',
+                name: 'Ollie',
+            },
+            proof: {
+                type: 'Ed25519Signature2018',
+                created: expect.any(String) as string, // Only need to know field is populated
+                verificationMethod:
+                    'did:key:z6MknTZPNAtKXhYUC51KueL2RmJX6nMhZAbjfzV6LRv17Juz#z6MknTZPNAtKXhYUC51KueL2RmJX6nMhZAbjfzV6LRv17Juz',
+                proofPurpose: 'assertionMethod',
+                jws: expect.any(String) as string, // Only need to know field is populated as it changes each time it is ran
+            },
+        });
+    });
+
     it('SignVC for jsonld using did:key with an id', async () => {
         const jsonldService = new JSONLDService();
         const ldProof = await jsonldService.signVC(didWithKeys, {
