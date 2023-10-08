@@ -108,6 +108,7 @@ export class JSONLDService implements SignatureService {
             presentation,
             format: ['vp'],
             challenge: configs.challenge,
+            domain: configs.domain,
             documentLoader,
             suite: new Ed25519Signature2018({
                 key,
