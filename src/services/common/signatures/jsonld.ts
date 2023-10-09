@@ -20,15 +20,20 @@ export class JSONLDService implements SignatureService {
      *
      * @param keys - `DIDWithKeys` - the DID and the keypair that will sign the token
      * @param token - `CredentialPayload` - the Credential object
-     * @param _configs Currently not supported yet.
+     * @param configs - Optional configurations to apply to the VC. Currently supported configurations include:
+     * * `overrideVerificationMethodId` - used to override the `verificationMethod` identifier of the `proof`
+     *  that is created.
      * @returns JSON stringified JSON-LD token
      */
     async signVC(
         keys: DIDWithKeys,
         token: CredentialPayload,
-        _configs?: CreateCredentialOptions | undefined,
+        configs?: CreateCredentialOptions,
     ): Promise<string> {
-        const key = await this.createEd25519VerificationKey(keys);
+        const key = await this.createEd25519VerificationKey(
+            keys,
+            configs?.overrideVerificationMethodId,
+        );
 
         const { id, issuanceDate } = token;
 
@@ -126,13 +131,18 @@ export class JSONLDService implements SignatureService {
      * Creates a verification key to sign the credential.
      *
      * @param keys `DIDWithKeys` to use in signing the credential.
+     * @param overrideVerificationMethodId used to override the `verificationMethod` identifier of the `proof`
+     *  that is created. If not provided, then the default verificationMethod for DIDKey DIDs will be used.
      * @returns `Ed25519VerificationKey2018` the verification key to sign the credential.
      */
     async createEd25519VerificationKey(
         keys: DIDWithKeys,
+        overrideVerificationMethodId?: string,
     ): Promise<Ed25519VerificationKey2018> {
         const { did, keyPair } = keys;
         const id = did.split(':').pop();
+        // verificationMethod identifier used when using a did:key based key
+        const didKeyVerificationMethodIdentifier = `${did}#${id}`;
 
         if (keys.keyPair.algorithm !== KEY_ALG.EdDSA) {
             throw new Error(
@@ -143,7 +153,9 @@ export class JSONLDService implements SignatureService {
         const base58Keys = KeyUtils.encodeToBase58(keyPair);
 
         return await Ed25519VerificationKey2018.from({
-            id: `${did}#${id}`,
+            id:
+                overrideVerificationMethodId ??
+                didKeyVerificationMethodIdentifier,
             type: 'Ed25519VerificationKey2018', // Used for compatibility with 'https://www.w3.org/2018/credentials/v1' context
             controller: did,
             publicKeyBase58: base58Keys.publicKey,
