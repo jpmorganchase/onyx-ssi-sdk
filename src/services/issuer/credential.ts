@@ -5,7 +5,6 @@ import {
     DIDWithKeys,
     JSONLDService,
     JWTService,
-    SCHEMA_CONTEXT,
     SCHEMA_VALIDATOR,
     VERIFIABLE_CREDENTIAL,
 } from '../common';
@@ -42,25 +41,29 @@ export function createCredential(
     credentialType: string[],
     additionalProperties?: Partial<CredentialPayload>,
 ): CredentialPayload {
-    let credential: Partial<CredentialPayload> = {};
     const currentTimeInSeconds = Math.floor(new Date().getTime() / 1000);
     const validFrom = new Date();
     validFrom.setTime(currentTimeInSeconds * 1000);
 
-    credential['@context'] = [DEFAULT_CONTEXT];
+    let context = [DEFAULT_CONTEXT];
     if (additionalProperties && additionalProperties['@context']) {
-        isString(additionalProperties['@context'])
-            ? credential['@context'].push(additionalProperties['@context'])
-            : credential['@context'].concat(additionalProperties['@context']);
+        if (isString(additionalProperties['@context'])) {
+            context.push(additionalProperties['@context']);
+        } else {
+            context = context.concat(additionalProperties['@context']);
+        }
     }
-    credential.credentialSubject = { id: subjectDID, ...credentialSubject };
-    credential.issuer = { id: issuerDID };
-    credential.type = [VERIFIABLE_CREDENTIAL, ...credentialType];
-    credential.issuanceDate = validFrom.toISOString();
 
-    credential = Object.assign(credential, additionalProperties);
+    const credential: CredentialPayload = {
+        ...additionalProperties,
+        ['@context']: context,
+        credentialSubject: { id: subjectDID, ...credentialSubject },
+        type: [VERIFIABLE_CREDENTIAL, ...credentialType],
+        issuer: { id: issuerDID },
+        issuanceDate: validFrom.toISOString(),
+    };
 
-    return credential as CredentialPayload;
+    return credential;
 }
 
 /**
@@ -152,6 +155,24 @@ export async function createAndSignCredentialJWT(
     return await jwtService.signVC(issuer, payload, options);
 }
 
+/**
+ * Creates a Verifiable Credential JSONLD from {@link DIDWithKeys} and
+ * required properties of the Verifiable Credential
+ *
+ * This method first creates the Credential object from the DID of the Issuer, the DID of the subject,
+ * the credentialType and the credentialSubject. This object becomes the payload that is added to the
+ * [JSON-LD spec as described](https://www.w3.org/TR/json-ld11/).
+ *
+ * The `DIDWithKeys` is used to sign the JSONLD that encodes the Verifiable Credential.
+ *
+ * @param issuer
+ * @param subjectDID
+ * @param credentialSubject
+ * @param credentialType
+ * @param additionalProperties
+ * @param options
+ * @returns
+ */
 export async function createAndSignCredentialJSONLD(
     issuer: DIDWithKeys,
     subjectDID: DID,
@@ -160,22 +181,12 @@ export async function createAndSignCredentialJSONLD(
     additionalProperties?: Partial<CredentialPayload>,
     options?: CreateCredentialOptions,
 ): Promise<string> {
-    const additionalProps = {
-        ...additionalProperties,
-        '@context':
-            additionalProperties &&
-            additionalProperties['@context'] !== undefined
-                ? isString(additionalProperties['@context'])
-                    ? [additionalProperties['@context'], SCHEMA_CONTEXT]
-                    : [...additionalProperties['@context'], SCHEMA_CONTEXT]
-                : [SCHEMA_CONTEXT],
-    };
     const payload = createCredential(
         issuer.did,
         subjectDID,
         credentialSubject,
         credentialType,
-        additionalProps,
+        additionalProperties,
     );
 
     const jsonldService = new JSONLDService();

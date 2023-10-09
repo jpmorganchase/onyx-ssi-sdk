@@ -1,10 +1,9 @@
 import { publicKeyCreate } from 'secp256k1';
-import { isString } from 'lodash'
+import { isString } from 'lodash';
 import { KeyTypeError } from '../errors';
-import bs58 from 'bs58'
+import bs58 from 'bs58';
 
 export class KeyUtils {
-
     static readonly PUBLIC_KEY_LENGTH = 32;
     static readonly PRIVATE_KEY_LENGTH = 64;
 
@@ -14,10 +13,11 @@ export class KeyUtils {
      * @returns {string} the public key in hex
      */
     static privateKeyToPublicKey(privateKey: string): string {
-        if(!this.isHexPrivateKey(privateKey)) {
-            throw new KeyTypeError('private key should be hex')
+        if (!this.isHexPrivateKey(privateKey)) {
+            throw new KeyTypeError('private key should be hex');
         }
-        const noprefixPrivateKey = privateKey.slice(0, 2) === '0x' ? privateKey.slice(2) : privateKey;
+        const noprefixPrivateKey =
+            privateKey.slice(0, 2) === '0x' ? privateKey.slice(2) : privateKey;
         const privateKeyBuffer = Buffer.from(noprefixPrivateKey, 'hex');
         return Buffer.from(publicKeyCreate(privateKeyBuffer)).toString('hex');
     }
@@ -31,8 +31,8 @@ export class KeyUtils {
         if (!isString(key)) {
             return false;
         }
-        const hexMatcher = /^(0x)?([a-fA-F0-9]{64}|[a-fA-F0-9]{128})$/
-        return hexMatcher.test(key as string)
+        const hexMatcher = /^(0x)?([a-fA-F0-9]{64}|[a-fA-F0-9]{128})$/;
+        return hexMatcher.test(key as string);
     }
 
     /**
@@ -45,13 +45,15 @@ export class KeyUtils {
         if (!isString(key)) {
             return false;
         }
-        const hexMatcher = strict ? /^(0x)([a-fA-F0-9]{66})$/ : /^(0x)?([a-fA-F0-9]{66})$/
-        return hexMatcher.test(key as string)
+        const hexMatcher = strict
+            ? /^(0x)([a-fA-F0-9]{66})$/
+            : /^(0x)?([a-fA-F0-9]{66})$/;
+        return hexMatcher.test(key as string);
     }
 
     /**
      * Checks if given private key is bytes
-     * 
+     *
      * @param key private key
      * @returns true if private key is correct number of bytes
      */
@@ -61,7 +63,7 @@ export class KeyUtils {
 
     /**
      * Checks if given public key is bytes
-     * 
+     *
      * @param key public key
      * @returns true if public key is correct number of bytes
      */
@@ -71,31 +73,31 @@ export class KeyUtils {
 
     /**
      * Takes a key pair and encodes the keys in base58 format.
-     * 
-     * @param keys `KeyPair` the keys to be encoded to base58 
+     *
+     * @param keys `KeyPair` the keys to be encoded to base58
      * @returns Public and Private keys encoded in base58
      */
-    static encodeToBase58(keys: KeyPair): Omit<KeyPair, 'algorithm'> {    
-        const { publicKey, privateKey } = keys
+    static encodeToBase58(keys: KeyPair): Omit<KeyPair, 'algorithm'> {
+        const { publicKey, privateKey } = keys;
 
-        let pubKeyBytes = !isString(publicKey) ? Buffer.from(publicKey) : (
-            this.isHexPublicKey(publicKey)
-            ? Buffer.from(publicKey.replace(/^0x/,''), 'hex')
-            : Buffer.from(publicKey, 'base64')
-        )
-        let pubKeyBs58 = bs58.encode(pubKeyBytes)
+        /* eslint-disable @typescript-eslint/indent */
+        const pubKeyBytes = !isString(publicKey)
+            ? Buffer.from(publicKey)
+            : this.isHexPublicKey(publicKey)
+            ? Buffer.from(publicKey.replace(/^0x/, ''), 'hex')
+            : Buffer.from(publicKey, 'base64');
 
-        let privKeyBytes = !isString(privateKey) ? Buffer.from(privateKey) : (
-            this.isHexPrivateKey(privateKey)
-            ? Buffer.from(privateKey.replace(/^0x/,''), 'hex')
-            : Buffer.from(privateKey, 'base64')
-        )
-        let privKeyBs58 = bs58.encode(privKeyBytes)
+        const privKeyBytes = !isString(privateKey)
+            ? Buffer.from(privateKey)
+            : this.isHexPrivateKey(privateKey)
+            ? Buffer.from(privateKey.replace(/^0x/, ''), 'hex')
+            : Buffer.from(privateKey, 'base64');
+        /* eslint-enable  */
 
-        return { publicKey: pubKeyBs58, privateKey: privKeyBs58 }
+        const pubKeyBs58 = bs58.encode(pubKeyBytes);
+        const privKeyBs58 = bs58.encode(privKeyBytes);
+        return { publicKey: pubKeyBs58, privateKey: privKeyBs58 };
     }
-
-    
 }
 
 /**
@@ -104,17 +106,17 @@ export class KeyUtils {
  * EdDSA is for use with did:key
  */
 export enum KEY_ALG {
-    ES256K = "ES256K",
-    EdDSA = "EdDSA"
+    ES256K = 'ES256K',
+    EdDSA = 'EdDSA',
 }
-  
+
 /**
  * Data model for a KeyPair type
  * KeyPairs are used for Digital Signature verification of VerifiableCredentials
  * Depending on the algorithm used, keys can be in the form of a hex string or byte array
  */
 export interface KeyPair {
-    algorithm: KEY_ALG,
-    publicKey: string | Uint8Array,
-    privateKey: string | Uint8Array
+    algorithm: KEY_ALG;
+    publicKey: string | Uint8Array;
+    privateKey: string | Uint8Array;
 }
