@@ -5,7 +5,6 @@ import {
     DIDWithKeys,
     JSONLDService,
     JWTService,
-    SCHEMA_CONTEXT,
     SCHEMA_VALIDATOR,
     VERIFIABLE_CREDENTIAL,
 } from '../common';
@@ -42,25 +41,28 @@ export function createCredential(
     credentialType: string[],
     additionalProperties?: Partial<CredentialPayload>,
 ): CredentialPayload {
-    let credential: Partial<CredentialPayload> = {};
     const currentTimeInSeconds = Math.floor(new Date().getTime() / 1000);
     const validFrom = new Date();
     validFrom.setTime(currentTimeInSeconds * 1000);
 
-    credential['@context'] = [DEFAULT_CONTEXT];
+    let context = [DEFAULT_CONTEXT];
     if (additionalProperties && additionalProperties['@context']) {
-        isString(additionalProperties['@context'])
-            ? credential['@context'].push(additionalProperties['@context'])
-            : credential['@context'].concat(additionalProperties['@context']);
+        if (isString(additionalProperties?.['@context'])) {
+            context.push(additionalProperties['@context']);
+        }
+        context = context.concat(additionalProperties['@context']);
     }
-    credential.credentialSubject = { id: subjectDID, ...credentialSubject };
-    credential.issuer = { id: issuerDID };
-    credential.type = [VERIFIABLE_CREDENTIAL, ...credentialType];
-    credential.issuanceDate = validFrom.toISOString();
 
-    credential = Object.assign(credential, additionalProperties);
+    const credential: CredentialPayload = {
+        ...additionalProperties,
+        ['@context']: context,
+        credentialSubject: { id: subjectDID, ...credentialSubject },
+        type: [VERIFIABLE_CREDENTIAL, ...credentialType],
+        issuer: { id: issuerDID },
+        issuanceDate: validFrom.toISOString(),
+    };
 
-    return credential as CredentialPayload;
+    return credential;
 }
 
 /**
