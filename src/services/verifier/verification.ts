@@ -12,6 +12,7 @@ import { decodeJWT } from 'did-jwt';
 import { DIDMethodFailureError } from '../../errors';
 import { verifiable } from '@transmute/vc.js';
 import { Ed25519Signature2018 } from '@transmute/ed25519-signature-2018';
+import { VerifiablePresentation as JsonLdVP } from '@transmute/vc.js/dist/types/VerifiablePresentation';
 
 /**
  * Provides verification of a Verifiable Credential JWT
@@ -76,7 +77,8 @@ export async function verifyPresentationJWT(
 }
 
 export async function verifyPresentationJSONLD(
-    vp: VerifiablePresentation,
+    vp: JsonLdVP,
+    didResolver: Resolvable,
     options?: VerifyPresentationOptions,
 ): Promise<boolean> {
     if (typeof vp === 'string') {
@@ -84,16 +86,37 @@ export async function verifyPresentationJSONLD(
             'JWT tokens are not able to be verified for JSON-LD credentials.',
         );
     }
-    const documentLoader = new ContextManager().createDocumentLoader();
+
+    const documentLoader = new ContextManager().createDocumentLoader(
+        didResolver,
+    );
     const verified = await verifiable.presentation.verify({
+        format: ['vp'],
         presentation: vp,
-        documentLoader,
+        documentLoader: async (iri) => {
+            // NOTE: when resolving DIDs for their verificationMethod, the 
+            // documentLoader is expected to resolve the FULL DIDDoc, rather
+            // than just the DIDDoc for the fragment of the verificationMethod.
+            let formattedIri = stripDidFragment(iri);
+            return await documentLoader(formattedIri);
+        },
         challenge: options?.challenge ?? '',
         domain: options?.domain,
         suite: new Ed25519Signature2018(),
     });
 
     return verified.verified;
+}
+
+/**
+ * Strips any DID fragment from the DID. For instance:
+ * `did:example:123#some_path` -> `did:example:123`
+ */
+function stripDidFragment(didUrl: string): string {
+    // only intended for DID URIs
+    if (!didUrl.startsWith('did:')) return didUrl;
+
+    return didUrl.split('#')[0];
 }
 
 /**

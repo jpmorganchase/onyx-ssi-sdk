@@ -1,5 +1,6 @@
-import { Url, documentLoaderFactory } from '@transmute/jsonld-document-loader';
+import { Url, Did, documentLoaderFactory } from '@transmute/jsonld-document-loader';
 import axios from 'axios';
+import { Resolvable } from 'did-resolver';
 
 /**
  * Manager to provide a method to interpret dids to a json object.
@@ -11,14 +12,23 @@ export class ContextManager {
      *
      * @returns a document loader function
      */
-    createDocumentLoader() {
+    createDocumentLoader(didResolver?: Resolvable | undefined) {
         // For more information see: https://github.com/transmute-industries/verifiable-data/tree/main/packages/jsonld-document-loader
-        return documentLoaderFactory.build({
+        let resolvers: any = {
             ['https://']: async (iri: Url) => {
                 const { data } = await axios.get(iri);
                 return data;
-            },
-        });
+            }
+        }
+
+        if (didResolver !== undefined) {
+            resolvers = { ["did:"]: async (did: Did) => {
+                const res = await didResolver.resolve(did)
+                return res.didDocument
+            }, ...resolvers }
+        }
+
+        return documentLoaderFactory.build(resolvers);
     }
 }
 

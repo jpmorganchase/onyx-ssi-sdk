@@ -500,6 +500,21 @@ describe('verification utilities - requiring didresolver', () => {
 });
 
 describe('verification utilities - jsonld verification', () => {
+
+    let oneResolver: Resolver;
+    let combinedResolver: Resolver;
+    beforeAll(async () => {
+        const keyMethod = new KeyDIDMethod();
+        const ethrMethod = new EthrDIDMethod({
+            name: 'maticmum',
+            rpcUrl: 'https://rpc-mumbai.maticvigil.com/',
+            registry: '0x41D788c9c5D335362D713152F407692c5EEAfAae',
+        });
+
+        oneResolver = getSupportedResolvers([keyMethod]);
+        combinedResolver = getSupportedResolvers([keyMethod, ethrMethod]);
+    });
+
     const VP_PAYLOAD_JWT_ETHR =
         'eyJhbGciOiJFUzI1NksiLCJ0eXAiOiJKV1QifQ.eyJ2cCI6eyJAY29udGV4dCI6WyJodHRwczovL3d3dy53My5vcmcvMjAxOC9jcmVkZW50aWFscy92MSJdLCJ0eXBlIjpbIlZlcmlmaWFibGVQcmVzZW50YXRpb24iXSwidmVyaWZpYWJsZUNyZWRlbnRpYWwiOlsiZXlKaGJHY2lPaUpGVXpJMU5rc2lMQ0owZVhBaU9pSktWMVFpZlEuZXlKbGVIQWlPakUzTURReE16Y3dNRFFzSW5aaklqcDdJa0JqYjI1MFpYaDBJanBiSW1oMGRIQnpPaTh2ZDNkM0xuY3pMbTl5Wnk4eU1ERTRMMk55WldSbGJuUnBZV3h6TDNZeElsMHNJblI1Y0dVaU9sc2lWbVZ5YVdacFlXSnNaVU55WldSbGJuUnBZV3dpTENKUWNtOXZaazltVG1GdFpTSmRMQ0pqY21Wa1pXNTBhV0ZzVTNWaWFtVmpkQ0k2ZXlKdVlXMWxJam9pVDJ4c2FXVWlmU3dpWTNKbFpHVnVkR2xoYkZOamFHVnRZU0k2ZXlKcFpDSTZJbWgwZEhCek9pOHZaWGhoYlhCc1pTNXZjbWN2WlhoaGJYQnNaWE12WkdWbmNtVmxMbXB6YjI0aUxDSjBlWEJsSWpvaVNuTnZibE5qYUdWdFlWWmhiR2xrWVhSdmNqSXdNVGdpZlN3aVkzSmxaR1Z1ZEdsaGJGTjBZWFIxY3lJNmV5SnBaQ0k2SW1oMGRIQnpPaTh2WlhoaGJYQnNaUzVsWkhVdmMzUmhkSFZ6THpJMElpd2lkSGx3WlNJNklrTnlaV1JsYm5ScFlXeFRkR0YwZFhOTWFYTjBNakF4TnlKOWZTd2ljM1ZpSWpvaVpHbGtPbVYwYUhJNmJXRjBhV050ZFcwNk1IaEdOa1JrTWtZek1EUmhZemMzWkRsa01EUTVORGhqTkRnek1VVkJOak0yTkdNMU5qa3pOV1kzSWl3aWFuUnBJam9pWkdsa09tVjBhSEk2YldGMGFXTnRkVzA2TUhoaU9UTm1RekpDWWpaa05HWTVZek01UlRaaU1Ea3lZVVUwTVRsbE1VSmpNREkyTURReE56UkJJaXdpYm1KbUlqb3hOamd6TmpRNU1qQXdMQ0pwYzNNaU9pSmthV1E2WlhSb2NqcHRZWFJwWTIxMWJUb3dlREJFWkRJMk9UZGlRakE1WXpBMlEwVkNaR0ZGTVRJeVFUZzROVFk1TmpRd04yUXdZV0V3UWpBaWZRLm00ODF2SUVWYWpZb0ZZZDJjVi10S2QxSmpfckRKUHdwU2JNQXlOT3E5NTQxYk5sRk9JNlJySVBvbnJiTzFiaWdkTE8xU1NQVWdxU2lWVW9qZlNzY0VRIl19LCJpc3MiOiJkaWQ6ZXRocjptYXRpY211bToweDA3NjIzMUE0NzViOEY5MDVmNzFmNDU1ODBiRDAwNjQyMDI1YzRlMEQifQ.k6wmeflMFAQ-kvGhoC0TC-EXbVeW6ftknhNiENYA5Xjif-jP6d8JstcQzFSAE2ojyqMdsPuUGipi0eRxh1IlrA';
 
@@ -510,7 +525,6 @@ describe('verification utilities - jsonld verification', () => {
         ],
         type: ['VerifiablePresentation'],
         holder: 'did:key:z6MknTZPNAtKXhYUC51KueL2RmJX6nMhZAbjfzV6LRv17Juz',
-        verifier: [], // TODO: What does this need to be?
         verifiableCredential: [
             {
                 '@context': [
@@ -547,16 +561,12 @@ describe('verification utilities - jsonld verification', () => {
         },
     };
 
-    it('Fails in verifying VP jsonld that uses a JWT', async () => {
-        await expect(
-            verifyPresentationJSONLD(VP_PAYLOAD_JWT_ETHR),
-        ).rejects.toThrowError(
-            'JWT tokens are not able to be verified for JSON-LD credentials.',
-        );
-    });
-
     it('Succeeds in verifying VP jsonld', async () => {
-        const result = await verifyPresentationJSONLD(VP_PAYLOAD_JSONLD);
+        const result = await verifyPresentationJSONLD(VP_PAYLOAD_JSONLD,
+            combinedResolver,
+            {
+            challenge: "jasonschallenge"
+        });
         expect(result).toEqual(true);
     });
 
