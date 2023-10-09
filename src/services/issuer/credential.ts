@@ -152,6 +152,24 @@ export async function createAndSignCredentialJWT(
     return await jwtService.signVC(issuer, payload, options);
 }
 
+/**
+ * Creates a Verifiable Credential JSONLD from {@link DIDWithKeys} and
+ * required properties of the Verifiable Credential
+ *
+ * This method first creates the Credential object from the DID of the Issuer, the DID of the subject,
+ * the credentialType and the credentialSubject. This object becomes the payload that is added to the
+ * [JSON-LD spec as described](https://www.w3.org/TR/json-ld11/).
+ *
+ * The `DIDWithKeys` is used to sign the JSONLD that encodes the Verifiable Credential.
+ *
+ * @param issuer
+ * @param subjectDID
+ * @param credentialSubject
+ * @param credentialType
+ * @param additionalProperties
+ * @param options
+ * @returns
+ */
 export async function createAndSignCredentialJSONLD(
     issuer: DIDWithKeys,
     subjectDID: DID,
@@ -160,22 +178,12 @@ export async function createAndSignCredentialJSONLD(
     additionalProperties?: Partial<CredentialPayload>,
     options?: CreateCredentialOptions,
 ): Promise<string> {
-    const additionalProps = {
-        ...additionalProperties,
-        '@context':
-            additionalProperties &&
-            additionalProperties['@context'] !== undefined
-                ? isString(additionalProperties['@context'])
-                    ? [additionalProperties['@context'], SCHEMA_CONTEXT]
-                    : [...additionalProperties['@context'], SCHEMA_CONTEXT]
-                : [SCHEMA_CONTEXT],
-    };
     const payload = createCredential(
         issuer.did,
         subjectDID,
         credentialSubject,
         credentialType,
-        additionalProps,
+        additionalProperties,
     );
 
     const jsonldService = new JSONLDService();
