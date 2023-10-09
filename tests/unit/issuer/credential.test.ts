@@ -6,10 +6,12 @@ import {
     JWTService,
     KeyDIDMethod,
     PROOF_OF_NAME,
+    SCHEMA_CONTEXT,
     SCHEMA_VALIDATOR,
     VERIFIABLE_CREDENTIAL,
 } from '../../../src/services/common';
 import {
+    createAndSignCredentialJSONLD,
     createAndSignCredentialJWT,
     createCredential,
     createCredentialFromSchema,
@@ -169,7 +171,50 @@ describe('credential utilities', () => {
         expect(payload.sub).toEqual(holder.did);
     });
 
-    it.todo('Successfully creates and signs VC JSON-LD');
+    it('Successfully creates and signs VC JSON-LD', async () => {
+        const issuer = {
+            did: 'did:key:z6MknTZPNAtKXhYUC51KueL2RmJX6nMhZAbjfzV6LRv17Juz',
+            keyPair: {
+                algorithm: KEY_ALG.EdDSA,
+                publicKey:
+                    '0x76f11a56051843a758f457c5891bac494056d447f3606e5131648c453d6f30f5',
+                privateKey:
+                    '0xb2e15a821fe57b6af467ab4c3aaa264456a14f90bed5cf8a00f013bdbe7177be76f11a56051843a758f457c5891bac494056d447f3606e5131648c453d6f30f5',
+            },
+        };
+        const credential = await createAndSignCredentialJSONLD(
+            issuer,
+            holder.did,
+            subjectData,
+            [PROOF_OF_NAME],
+            { '@context': [SCHEMA_CONTEXT] },
+        );
+
+        const result = JSON.parse(credential);
+        expect(result).toEqual({
+            '@context': [
+                'https://www.w3.org/2018/credentials/v1',
+                'https://schema.org/docs/jsonldcontext.jsonld',
+            ],
+            credentialSubject: {
+                id: 'did:ethr:maticmum:0x076231A475b8F905f71f45580bD00642025c4e0D',
+                name: 'Ollie',
+            },
+            type: ['VerifiableCredential', 'proofOfName'],
+            issuer: {
+                id: 'did:key:z6MknTZPNAtKXhYUC51KueL2RmJX6nMhZAbjfzV6LRv17Juz',
+            },
+            issuanceDate: expect.any(String) as string,
+            proof: {
+                type: 'Ed25519Signature2018',
+                created: expect.any(String) as string,
+                verificationMethod:
+                    'did:key:z6MknTZPNAtKXhYUC51KueL2RmJX6nMhZAbjfzV6LRv17Juz#z6MknTZPNAtKXhYUC51KueL2RmJX6nMhZAbjfzV6LRv17Juz',
+                proofPurpose: 'assertionMethod',
+                jws: expect.any(String) as string,
+            },
+        });
+    });
 
     it('Successfully Revokes Credential using DID', async () => {
         const ethrMethod = new EthrDIDMethod({

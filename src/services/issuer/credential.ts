@@ -47,10 +47,11 @@ export function createCredential(
 
     let context = [DEFAULT_CONTEXT];
     if (additionalProperties && additionalProperties['@context']) {
-        if (isString(additionalProperties?.['@context'])) {
+        if (isString(additionalProperties['@context'])) {
             context.push(additionalProperties['@context']);
+        } else {
+            context = context.concat(additionalProperties['@context']);
         }
-        context = context.concat(additionalProperties['@context']);
     }
 
     const credential: CredentialPayload = {
