@@ -1,6 +1,8 @@
 import { publicKeyCreate } from 'secp256k1';
 import { isString } from 'lodash'
 import { KeyTypeError } from '../errors';
+import bs58 from 'bs58'
+
 export class KeyUtils {
 
     static readonly PUBLIC_KEY_LENGTH = 32;
@@ -66,6 +68,34 @@ export class KeyUtils {
     static isBytesPublicKey(key: string | Uint8Array): boolean {
         return !isString(key) && key.length === KeyUtils.PUBLIC_KEY_LENGTH;
     }
+
+    /**
+     * Takes a key pair and encodes the keys in base58 format.
+     * 
+     * @param keys `KeyPair` the keys to be encoded to base58 
+     * @returns Public and Private keys encoded in base58
+     */
+    static encodeToBase58(keys: KeyPair): Omit<KeyPair, 'algorithm'> {    
+        const { publicKey, privateKey } = keys
+
+        let pubKeyBytes = !isString(publicKey) ? Buffer.from(publicKey) : (
+            this.isHexPublicKey(publicKey)
+            ? Buffer.from(publicKey.replace(/^0x/,''), 'hex')
+            : Buffer.from(publicKey, 'base64')
+        )
+        let pubKeyBs58 = bs58.encode(pubKeyBytes)
+
+        let privKeyBytes = !isString(privateKey) ? Buffer.from(privateKey) : (
+            this.isHexPrivateKey(privateKey)
+            ? Buffer.from(privateKey.replace(/^0x/,''), 'hex')
+            : Buffer.from(privateKey, 'base64')
+        )
+        let privKeyBs58 = bs58.encode(privKeyBytes)
+
+        return { publicKey: pubKeyBs58, privateKey: privKeyBs58 }
+    }
+
+    
 }
 
 /**
@@ -88,4 +118,3 @@ export interface KeyPair {
     publicKey: string | Uint8Array,
     privateKey: string | Uint8Array
 }
-

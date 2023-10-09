@@ -9,5 +9,15 @@ module.exports = {
         ['lcov', { projectRoot: '../' }],
         'text-summary',
     ],
-    transformIgnorePatterns: ["/node_modules/(?!key-did-resolver/)"]
+    transformIgnorePatterns: ["/node_modules/(?!key-did-resolver/)"],
+    transform: {
+        // '^.+\\.[tj]sx?$' to process js/ts with `ts-jest`
+        // '^.+\\.m?[tj]sx?$' to process js/ts/mjs/mts with `ts-jest`
+        '^.+\\.tsx?$': [
+            'ts-jest',
+            {
+                tsconfig: './configs/tsconfig.base.json',
+            },
+        ],
+    },
 };
