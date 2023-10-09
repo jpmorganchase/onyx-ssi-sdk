@@ -81,12 +81,6 @@ export async function verifyPresentationJSONLD(
     didResolver: Resolvable,
     options?: VerifyPresentationOptions,
 ): Promise<boolean> {
-    if (typeof vp === 'string') {
-        throw new Error(
-            'JWT tokens are not able to be verified for JSON-LD credentials.',
-        );
-    }
-
     const documentLoader = new ContextManager().createDocumentLoader(
         didResolver,
     );
@@ -94,10 +88,10 @@ export async function verifyPresentationJSONLD(
         format: ['vp'],
         presentation: vp,
         documentLoader: async (iri) => {
-            // NOTE: when resolving DIDs for their verificationMethod, the 
+            // NOTE: when resolving DIDs for their verificationMethod, the
             // documentLoader is expected to resolve the FULL DIDDoc, rather
             // than just the DIDDoc for the fragment of the verificationMethod.
-            let formattedIri = stripDidFragment(iri);
+            const formattedIri = stripDidFragment(iri);
             return await documentLoader(formattedIri);
         },
         challenge: options?.challenge ?? '',
