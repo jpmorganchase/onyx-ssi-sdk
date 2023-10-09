@@ -80,20 +80,22 @@ export class KeyUtils {
     static encodeToBase58(keys: KeyPair): Omit<KeyPair, 'algorithm'> {
         const { publicKey, privateKey } = keys;
 
+        /* eslint-disable @typescript-eslint/indent */
         const pubKeyBytes = !isString(publicKey)
             ? Buffer.from(publicKey)
             : this.isHexPublicKey(publicKey)
             ? Buffer.from(publicKey.replace(/^0x/, ''), 'hex')
             : Buffer.from(publicKey, 'base64');
-        const pubKeyBs58 = bs58.encode(pubKeyBytes);
 
         const privKeyBytes = !isString(privateKey)
             ? Buffer.from(privateKey)
             : this.isHexPrivateKey(privateKey)
             ? Buffer.from(privateKey.replace(/^0x/, ''), 'hex')
             : Buffer.from(privateKey, 'base64');
-        const privKeyBs58 = bs58.encode(privKeyBytes);
+        /* eslint-enable  */
 
+        const pubKeyBs58 = bs58.encode(pubKeyBytes);
+        const privKeyBs58 = bs58.encode(privKeyBytes);
         return { publicKey: pubKeyBs58, privateKey: privKeyBs58 };
     }
 }
