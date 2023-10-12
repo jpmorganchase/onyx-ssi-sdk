@@ -82,18 +82,18 @@ export class WebDIDMethod implements DIDMethod {
     }
 
     /**
-     * Resolves a DID using the resolver from key-did-resolver to a {@link DIDResolutionResult} 
+     * Resolves a DID using the resolver from web-did-resolver to a {@link DIDResolutionResult} 
      * that contains the DIDDocument and associated Metadata
      * 
-     * Uses key-did-resolver and did-resolver
+     * Uses web-did-resolver and did-resolver
      * 
      * @param did - DID to be resolved to its DIDDocument
      * @returns a `Promise` that resolves to `DIDResolutionResult` defined in did-resolver
      * Throws `DIDMethodFailureError` if resolution failed
      */
     async resolve(did: DID ): Promise<DIDResolutionResult> {
-        const keyDidResolver = new Resolver(getResolver());
-        const result = await keyDidResolver.resolve(did);
+        const webDidResolver = new Resolver(getResolver());
+        const result = await webDidResolver.resolve(did);
         if (result.didResolutionMetadata.error) {
             throw new DIDMethodFailureError(`DID Resolution failed for ${did}, ${result.didResolutionMetadata.error}`)
         }
