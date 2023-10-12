@@ -1,4 +1,4 @@
-import { DIDResolutionResult, DIDResolver, Resolver } from "did-resolver";
+import { DIDResolutionResult, DIDResolver } from "did-resolver";
 import { DID, DIDMethod, DIDWithKeys } from "./did";
 import { KeyUtils, KEY_ALG } from "../../../utils";
 import { getResolver } from "key-did-resolver";
@@ -7,6 +7,7 @@ import { DIDMethodFailureError } from "../../../errors";
 import { ethers } from 'ethers'
 import { ProviderConfigs } from "./did-ethr";
 import { Wallet } from "@ethersproject/wallet";
+import axios from "axios";
 
 export class WebDIDMethod implements DIDMethod {
     /**
@@ -85,19 +86,37 @@ export class WebDIDMethod implements DIDMethod {
      * Resolves a DID using the resolver from web-did-resolver to a {@link DIDResolutionResult} 
      * that contains the DIDDocument and associated Metadata
      * 
-     * Uses web-did-resolver and did-resolver
+     * Uses axios to resolve the DID
      * 
      * @param did - DID to be resolved to its DIDDocument
      * @returns a `Promise` that resolves to `DIDResolutionResult` defined in did-resolver
      * Throws `DIDMethodFailureError` if resolution failed
      */
     async resolve(did: DID ): Promise<DIDResolutionResult> {
-        const webDidResolver = new Resolver(getResolver());
-        const result = await webDidResolver.resolve(did);
-        if (result.didResolutionMetadata.error) {
-            throw new DIDMethodFailureError(`DID Resolution failed for ${did}, ${result.didResolutionMetadata.error}`)
+        try{
+            const url = new URL(did.replace("did:web:", "https://"));
+            let path = url.pathname;
+            if (path.length > 1 && path.includes("/")) {
+                path = path.replace(new RegExp("/" + "$"), "");
+            } else if (path.length === 1 && path.includes("/")) {
+                path = path.replace("/", "");
+            }
+            const didPath = `https://${url.host}${path}`.concat("/did.json");
+
+            const response = await axios.get(didPath);
+            if(response.status===200) {
+                return response.data;
+            }else {
+                throw new DIDMethodFailureError(`DID Resolution failed for ${did}, ${response.data}`)
+            }
+        }catch(error) {
+            let msg = error.message;
+            if(error.response) {
+                msg = error.response.data;
+            }
+            throw new DIDMethodFailureError(`DID Resolution failed for ${did}, ${msg}`)
+
         }
-        return result;
     }
 
     /**
