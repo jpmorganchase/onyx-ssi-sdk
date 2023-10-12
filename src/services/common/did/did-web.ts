@@ -70,7 +70,7 @@ export class WebDIDMethod implements DIDMethod {
         }
         const publicKey = KeyUtils.privateKeyToPublicKey(privateKey as string)
         const address = new Wallet(privateKey as string, this.web3Provider).address
-        const did = `did:ethr:${this.providerConfigs.name}:${address}`
+        const did = `did:web:${this.providerConfigs.name}:${address}`
         const identity: DIDWithKeys = {
             did,
             keyPair: {
@@ -99,7 +99,7 @@ export class WebDIDMethod implements DIDMethod {
             if (path.length > 1 && path.includes("/")) {
                 path = path.replace(new RegExp("/" + "$"), "");
             } else if (path.length === 1 && path.includes("/")) {
-                path = path.replace("/", "");
+                path = path.concat(".well-known");
             }
             const didPath = `https://${url.host}${path}`.concat("/did.json");
 
@@ -123,14 +123,14 @@ export class WebDIDMethod implements DIDMethod {
      * did:key does not support update
      */
     async update(_did: DIDWithKeys, _publicKey: string | Uint8Array): Promise<boolean> {
-        throw new DIDMethodFailureError('did:key does not support Update')
+        throw new DIDMethodFailureError('Updates on did:web must be done by the organisation.')
     }
 
     /**
      * did:key does not support deactivate
      */
     async deactivate(_did: DIDWithKeys): Promise<boolean> {
-        throw new DIDMethodFailureError('did:key does not support Delete')
+        throw new DIDMethodFailureError('Delete on did:web must be done by the organisation.')
     }
 
     /**
@@ -142,7 +142,6 @@ export class WebDIDMethod implements DIDMethod {
      */
     async isActive(did: DID): Promise<boolean> {
         return this.checkFormat(did)
-
     }
 
     /**
