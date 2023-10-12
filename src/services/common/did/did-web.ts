@@ -141,7 +141,12 @@ export class WebDIDMethod implements DIDMethod {
      * Throws `DIDMethodFailureError` otherwise
      */
     async isActive(did: DID): Promise<boolean> {
-        return this.checkFormat(did)
+        try{
+            const didResult = await this.resolve(did)
+            return !didResult.didDocumentMetadata.deactivated
+        }catch (error) {
+            return false;
+        }
     }
 
     /**
