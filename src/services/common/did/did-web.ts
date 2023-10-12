@@ -2,16 +2,25 @@ import { DIDResolutionResult, DIDResolver, Resolver } from "did-resolver";
 import { DID, DIDMethod, DIDWithKeys } from "./did";
 import { KeyUtils, KEY_ALG } from "../../../utils";
 import { getResolver } from "key-did-resolver";
-import { Ed25519KeyPair } from '@transmute/ed25519-key-pair';
+import { JsonRpcProvider, Provider } from "@ethersproject/providers";
 import { DIDMethodFailureError } from "../../../errors";
 import { ethers } from 'ethers'
+import { ProviderConfigs } from "./did-ethr";
+import { Wallet } from "@ethersproject/wallet";
 
 export class WebDIDMethod implements DIDMethod {
+    /**
+     * did:web DID document using an ethereum address
+     */
     name = 'web';
     domain: string;
+    providerConfigs: ProviderConfigs;
+    web3Provider: Provider;
 
-    constructor(domain: string) {
+    constructor(domain: string, providerConfigs: ProviderConfigs) {
         this.domain = domain;
+        this.providerConfigs = providerConfigs;
+        this.web3Provider = providerConfigs.provider ? providerConfigs.provider : new JsonRpcProvider(providerConfigs.rpcUrl);
     }
 
     /**
@@ -46,28 +55,30 @@ export class WebDIDMethod implements DIDMethod {
     }
 
     /**
+     * From did:ethr
      * Creates a DID given a private key
-     * Used when an EdDSA keypair has already been generated and is going to be used as a DID
+     * Used when an ES256K keypair has already been generated and is going to be used as a DID
      * 
-     * @param privateKey - private key to be used in creation of a did:key DID
+     * @param privateKey - private key to be used in creation of a did:ethr DID
      * @returns a `Promise` that resolves to {@link DIDWithKeys}
-     * Throws `DIDMethodFailureError` if supplied private key not in correct format
+     * Throws `DIDMethodFailureError` if private key is not in hex format
      */
     async generateFromPrivateKey(privateKey: string | Uint8Array): Promise<DIDWithKeys> {
-        if (!KeyUtils.isBytesPrivateKey(privateKey)) {
-            throw new DIDMethodFailureError('private key not in correct byte format')
+        if (!KeyUtils.isHexPrivateKey(privateKey)) {
+            throw new DIDMethodFailureError('new public key not in hex format')
         }
-        const bytes = new Uint8Array((privateKey as Uint8Array).subarray(0,32))
-          
-        const key = await Ed25519KeyPair.generate({ secureRandom: () => bytes })
-        return {
-            did: key.controller,
+        const publicKey = KeyUtils.privateKeyToPublicKey(privateKey as string)
+        const address = new Wallet(privateKey as string, this.web3Provider).address
+        const did = `did:ethr:${this.providerConfigs.name}:${address}`
+        const identity: DIDWithKeys = {
+            did,
             keyPair: {
-                algorithm: KEY_ALG.EdDSA,
-                publicKey: key.publicKey,
-                privateKey: key.privateKey as Uint8Array,
+                algorithm: KEY_ALG.ES256K,
+                publicKey,
+                privateKey
             }
         }
+        return identity;
     }
 
     /**
