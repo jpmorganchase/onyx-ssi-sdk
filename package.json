@@ -4,26 +4,17 @@
   "description": "SSI SDK for Onyx W3C Verifiable Credentials",
   "license": "Apache-2.0",
   "source": "src/index.ts",
-  "types": "./lib/cjs/types/index.d.ts",
   "main": "./lib/cjs/index.js",
+  "module": "./lib/esm/index.mjs",
+  "esnext": "./lib/esm/index.mjs",
+  "types": "./lib/esm/types/index.d.ts",
+  "type":"commonjs",
   "files": [
     "dist",
     "lib",
     "src",
     "LICENSE"
   ],
-  "exports": {
-    ".": {
-      "import": {
-        "types": "./lib/esm/types/index.d.ts",
-        "default": "./lib/esm/index.mjs"
-      },
-      "require": {
-        "types": "./lib/cjs/types/index.d.ts",
-        "default": "./lib/cjs/index.js"
-      }
-    }
-  },
   "repository": {
     "type": "git",
     "url": "https://github.com/jpmorganchase/onyx-ssi-sdk"
